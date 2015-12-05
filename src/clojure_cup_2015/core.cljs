@@ -2,7 +2,8 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [cljs.js :as cljs]
             [cljs.tools.reader :as r]
-            [cljsjs.codemirror]))
+            [cljsjs.codemirror]
+            [clojure-cup-2015.quiltest]))
 
 (enable-console-print!)
 
