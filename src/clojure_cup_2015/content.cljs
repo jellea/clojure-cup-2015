@@ -2,7 +2,7 @@
 
 (def header
   [:header
-   [:h1 "Into The Land of Quil"]
+   [:h1 "Into the Land of Quil"]
    [:h2 "A Great and Valiant Journey of Derring-do"]])
 
 
