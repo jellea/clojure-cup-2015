@@ -3,7 +3,12 @@
             [cljs.js :as cljs]
             [cljs.tools.reader :as r]
             [cljsjs.codemirror]
-            [clojure-cup-2015.quiltest]))
+            [clojure-cup-2015.quiltest]
+            [cljsjs.codemirror]
+            [cljsjs.codemirror.mode.clojure]
+            [cljsjs.codemirror.addon.edit.matchbrackets]
+            [cljsjs.codemirror.addon.fold.foldgutter]
+            [cljsjs.codemirror.addon.edit.closebrackets]))
 
 (enable-console-print!)
 
@@ -31,7 +36,13 @@
                          (reset! !result (str value))))))))
 
 (defn init-code-mirror [cm-ref !cm-obj !result !default-code]
-  (let [cm (js/CodeMirror cm-ref #js {:value @!default-code})]
+  (let [cm (js/CodeMirror cm-ref
+              #js {:value @!default-code
+                   ; :lineNumbers true
+                   :matchBrackets true
+                   :autoCloseBrackets true
+                   :theme "monokai"
+                   :mode "clojure"})]
     (.on cm "change" #(let [current-code (-> cm .-doc .getValue)]
                         (reset! !default-code current-code)
                         (eval current-code !result)))
@@ -58,7 +69,7 @@
     [:div
      (when error
        [:div.error
-        [:a {:href "#"} [:i {:class "fa fa-check fa-lg" :on-click dismiss!}]]
+        [:a {:href "#"} [:i.white {:on-click dismiss!} "X"]]
         [:p "ERROR"]
         [:p error]])
      [editor "(+ 3 2)"]]))
