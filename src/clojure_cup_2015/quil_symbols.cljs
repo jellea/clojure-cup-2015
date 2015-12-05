@@ -1,5 +1,6 @@
 (ns clojure-cup-2015.quil-symbols
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [clojure.string :as str]))
 
 (def functions
   '[;; COLOR ;;
@@ -234,7 +235,7 @@
     frame-rate
     height
     no-cursor
-    sketch
+    ;;sketch
     target-frame-rate
     width
     ;; INPUT ;;
@@ -281,13 +282,30 @@
 
 (def macros '[defsketch with-fill with-stroke with-translation])
 
-(defn make-require-str []
+(def live-sketches (atom {}))
+
+(defn sketch-wrapper [& {:keys [host] :as opts}]
+  (when-let [sketch (get @live-sketches host)]
+    (.exit sketch))
+  (let [new-sketch (apply quil.core/sketch (apply concat opts))]
+    (swap! live-sketches assoc host new-sketch))
+)
+
+(defn import-symbols-src
+  "A hack to make quil functions available in the main namespace, generates a
+  string that looks like (def fill quil.core/fill), which we then eval."
+  []
   (str
-   "(:require [quil.core :as q \n  :refer [\n"
-   (s/join " " functions)
-   "\n]\n"
-   "  :refer-macros [\n"
-   (s/join " " macros)
-   "\n]]\n"
-   "[quil.middleware :as m])")
-  )
+   (str/join "\n" (map #(str "(def " % " quil.core/" % ")") functions))
+   "(def sketch clojure-cup-2015.quil-symbols/sketch-wrapper)"))
+
+;; (defn make-require-str []
+;;   (str
+;;    "(:require [quil.core :as q \n  :refer [\n"
+;;    (s/join " " functions)
+;;    "\n]\n"
+;;    "  :refer-macros [\n"
+;;    (s/join " " macros)
+;;    "\n]]\n"
+;;    "[quil.middleware :as m])")
+;;   )

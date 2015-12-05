@@ -25,8 +25,9 @@
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
   [:div
-   [:canvas.right {:id id}]
-   [cm-editor {:on-change eval :default-value default-code} {}]])
+   [:div [:canvas.right {:id id}]]
+   [:div [cm-editor {:on-change eval :default-value default-code} {}]]])
+
 
 (defn inject-editors
   "Replace [:quil-code ...] in the content data with canvas-editor components."
@@ -44,15 +45,13 @@
 
 (defn q [selector] (.querySelector js/document selector))
 
-
-
-
 (defn eval [in-str]
-  (prn in-str)
   (let [st cljs-compiler-state]
     (cljs/eval-str st in-str 'fiddle.runtime
                    {:eval cljs/js-eval
                     :ns 'fiddle.runtime
+                    ;;:verbose true
+
                     ;; don't ask me why this works. It stops Clojurescript from complaining that
                     ;; *load-fn* isn't defined
                     :load (fn [_ cb] (cb {:lang :clj :source ""}))}
@@ -64,8 +63,6 @@
                        (do
                          (dismiss!)
                          (swap! !state assoc :result (str value))))))))
-
-(eval (str "(ns fiddle.runtime (:require [quil.core :as q] [quil.middleware :as m])) "))
 
 (defn error-display []
   (let [{:keys [error]} @!state]
@@ -83,25 +80,18 @@
 (defn bang-bang []
   [:div
    [error-display]
-   [:div
-    (inject-editors content/chapter-1)]
-   [:div.results
-    [result-display]]])
+   [:div.input (inject-editors content/all)]])
 
 (defn on-js-reload [])
 
 (defn init []
+  (eval
+   (str
+    "(ns fiddle.runtime
+     (:require [quil.core :as q]
+               [quil.middleware :as m]))"
+    (quil-symbols/import-symbols-src)))
   (reagent/render-component bang-bang
                             (. js/document (getElementById "app"))))
 
 (init)
-
-(comment
-  [cm-editor
-   {:on-change eval
-    :default-value (:initial-code config)}
-   {:matchBrackets true
-    :lineNumbers false
-    :autoCloseBrackets true
-    :theme "monokai"
-    :mode "clojure"}])
