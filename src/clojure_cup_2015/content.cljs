@@ -1,4 +1,5 @@
-(ns clojure-cup-2015.content)
+(ns clojure-cup-2015.content
+  (:require [clojure-cup-2015.core :refer [editor]]))
 
 (defn quil-editor [id default-code]
   [:div

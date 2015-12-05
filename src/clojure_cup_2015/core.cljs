@@ -3,7 +3,7 @@
             [cljs.js :as cljs]
             [cljs.tools.reader :as r]
             [cljsjs.codemirror]
-            [clojure-cup-2015.quiltest]))
+            [clojure-cup-2015.content :as content]))
 
 (enable-console-print!)
 
