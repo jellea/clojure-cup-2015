@@ -67,13 +67,14 @@ body {
     }
 }
 
-canvas {
+.output {
     position: fixed;
     top: 5px;
     right: 5px;
     transition:all 0.3s ease;
 }
-canvas.wobble {
+
+.wobble {
     -webkit-animation: swing 1s ease;
     animation: swing 1s ease;
     -webkit-animation-iteration-count: 1;

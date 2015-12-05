@@ -18,6 +18,7 @@
 (enable-console-print!)
 
 (declare eval)
+(declare reload!)
 
 (defonce cljs-compiler-state (cljs/empty-state))
 
@@ -25,8 +26,8 @@
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
   [:div
-   [:div [cm-editor {:on-change eval :default-value default-code} {}]]
-   [:div [:canvas {:id id}]]])
+   [:div [cm-editor {:on-change reload!, :default-value default-code} {}]]
+   [:div.output [:canvas {:id id}]]])
 
 (defn inject-editors
   "Replace [:quil-code ...] in the content data with canvas-editor components."
@@ -43,6 +44,20 @@
 (defn dismiss! [] (error! nil))
 
 (defn q [selector] (.querySelector js/document selector))
+(defn by-id [id] (.getElementById js/document id))
+
+(defn wobble! [e]
+  (.remove (.-classList e) "wobble")
+  (.setTimeout js/window #(.add (.-classList e) "wobble") 0))
+
+(defn query-selector [s]
+  (some-> (.querySelectorAll js/document s)
+          array-seq))
+
+(defn reload! [in-str]
+  (doseq [e (query-selector ".output")]
+    (wobble! e))
+  (eval in-str))
 
 (defn eval [in-str]
   (let [st cljs-compiler-state]
@@ -84,12 +99,10 @@
 (defn on-js-reload [])
 
 (defn init []
-  (eval
-   (str
-    "(ns fiddle.runtime
+  (eval (str "(ns fiddle.runtime
      (:require [quil.core :as q]
                [quil.middleware :as m]))"
-    (quil-symbols/import-symbols-src)))
+             (quil-symbols/import-symbols-src)))
   (reagent/render-component bang-bang
                             (. js/document (getElementById "app"))))
 
