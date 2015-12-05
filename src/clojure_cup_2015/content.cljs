@@ -7,20 +7,18 @@
 
 (def chapter-1
   [:div
+   [:p "Goodday, traveler."]
    [:p "Quil lets you do visual programming. You can make drawings and animations, and give instant feedback to user interaction."]
-   [:p "A Quil program is called a sketch. Here's a sketch of three pink triangles on a blue background."]
+   [:p "A Quil program is called a sketch."]
    [:quil-code
     "pink-triangles" "(defn draw-pink-triangles []
   (no-stroke)
+  (background 255)
 
-  (fill 244 213 221) ;; #f4d5dd
-  (triangle 20 20, 60 90, 15 60)
-
-  (fill 249 202 216) ;; #f9cad8
-  (triangle 220 210, 280 260, 215 240)
-
-  (fill 232 181 188) ;; #e8b5bc
-  (triangle 150 40, 227 50, 90 170))
+  (fill 240 150 155) ;; #f4d5dd
+  (doall (for [x (range 0 (width) 50)
+               y (range 0 (height) 50)]
+    (triangle (+ x 25) y, x (+ y 50), (+ x 50) (+ y 50)))))
 
 (sketch
   :host \"pink-triangles\"
@@ -29,7 +27,7 @@
 
    [:p "and something else"]
 
-   [:quil-code "tailspin" "
+   #_[:quil-code "tailspin" "
 (defn setup []
   (frame-rate 30)
   (let [max-r (/ (width) 2)
