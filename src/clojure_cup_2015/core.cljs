@@ -4,7 +4,14 @@
             [cljs.tools.reader :as r]
             [cljsjs.codemirror]))
 
-(defonce app-state (atom {:text ""}))
+(enable-console-print!)
+
+(defonce !state (atom {:result ""}))
+
+(defn error! [error]
+  (swap! !state assoc :error error))
+
+(defn dismiss! [] (error! nil))
 
 (defn q [selector] (.querySelector js/document selector))
 
@@ -14,27 +21,32 @@
                    {:eval cljs/js-eval :source-map true :ns 'fiddle.runtime}
                    (fn [{:keys [error value]}]
                      (if error
-                       (.error js/console error)
-                       (swap! app-state assoc :text (str value)))))))
-
-(enable-console-print!)
+                       (error! (->> error .-cause .-message))
+                       (swap! !state assoc :text (str value)))))))
 
 (memoize
   (let [cm (js/CodeMirror (.getElementById js/document "editor")
              #js {:value "(+ 1 4)"})]
     (.on cm "change" #(eval (-> cm .-doc .getValue)))))
 
+
 (defn bang-bang []
-  [:div
-   [:h2 "Bang bang"]
-   [:p "=> " (:text @app-state)]])
+  (let [{:keys [error] :as state} @!state]
+    [:div
+     (when error
+       [:div.error
+        [:a {:href "#"} [:i {:class "fa fa-check fa-lg" :on-click dismiss!}]]
+        [:p "ERROR"]
+        [:p error]])
+     [:h2 "Bang bang"]
+     [:p "=> " (:text @!state)]]))
 
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
 
 
-(defn on-js-reload []
-  ;; optionally touch your app-state to force rerendering depending on
+(defn on-js-reload [])
+  ;; optionally touch your !state to force rerendering depending on
   ;; your application
-  ;; (swap! app-state update-in [:__figwheel_counter] inc)
-  )
+  ;; (swap! !state update-in [:__figwheel_counter] inc)
+  
