@@ -62,14 +62,6 @@
                          (dismiss!)
                          (swap! !state assoc :result (str value))))))))
 
-(eval
- (str
-  "(ns fiddle.runtime
-     (:require [quil.core :as q]
-               [quil.middleware :as m]))"
-  (quil-symbols/import-symbols-src)))
-
-
 (defn error-display []
   (let [{:keys [error]} @!state]
     [:div
@@ -91,6 +83,12 @@
 (defn on-js-reload [])
 
 (defn init []
+  (eval
+   (str
+    "(ns fiddle.runtime
+     (:require [quil.core :as q]
+               [quil.middleware :as m]))"
+    (quil-symbols/import-symbols-src)))
   (reagent/render-component bang-bang
                             (. js/document (getElementById "app"))))
 
