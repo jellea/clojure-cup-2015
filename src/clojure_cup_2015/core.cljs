@@ -4,6 +4,8 @@
             [cljs.tools.reader :as r]
             [cljsjs.codemirror]))
 
+(defonce app-state (atom {:text ""}))
+
 (defn q [selector] (.querySelector js/document selector))
 
 (defn eval [in-str]
@@ -13,31 +15,19 @@
                    (fn [{:keys [error value]}]
                      (if error
                        (.error js/console error)
-                       (println "=>" (pr-str value)))))))
-
-(defn eval-input [e]
-  (eval (->> "#cljs-text" q .-value)))
-
-(defn start []
-  )
+                       (swap! app-state assoc :text (str value)))))))
 
 (enable-console-print!)
 
-(start)
-
-(defonce app-state (atom {}))
-(defn editor [])
-
-(memoize (let [cm (js/CodeMirror (.getElementById js/document "editor"))]
-           #js {:value "(+ 1 1)"}))
+(memoize
+  (let [cm (js/CodeMirror (.getElementById js/document "editor")
+             #js {:value "(+ 1 4)"})]
+    (.on cm "change" #(eval (-> cm .-doc .getValue)))))
 
 (defn bang-bang []
   [:div
    [:h2 "Bang bang"]
-   [:form#bang {:on-click eval-input}
-    [:textarea {:id "cljs-text", :rows 4, :cols 50}
-     "(+ 3 22)"]
-    [:input {:type :button, :value "Eval"}]]])
+   [:p "=> " (:text @app-state)]])
 
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
