@@ -25,8 +25,8 @@
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
   [:div
-   [cm-editor {:on-change eval :default-value default-code} {}]
-   [:canvas {:id id}]])
+   [:div [cm-editor {:on-change eval :default-value default-code} {}]]
+   [:div [:canvas {:id id}]]])
 
 (defn inject-editors
   "Replace [:quil-code ...] in the content data with canvas-editor components."
@@ -44,11 +44,7 @@
 
 (defn q [selector] (.querySelector js/document selector))
 
-
-
-
 (defn eval [in-str]
-  (prn in-str)
   (let [st cljs-compiler-state]
     (cljs/eval-str st in-str 'fiddle.runtime
                    {:eval cljs/js-eval
@@ -83,10 +79,7 @@
 (defn bang-bang []
   [:div
    [error-display]
-   [:div {:style {:width "600px"}}
-    (inject-editors content/chapter-1)]
-   [:div.results
-    [result-display]]])
+   [:div.input (inject-editors content/chapter-1)]])
 
 (defn on-js-reload [])
 
@@ -95,13 +88,3 @@
                             (. js/document (getElementById "app"))))
 
 (init)
-
-(comment
-  [cm-editor
-   {:on-change eval
-    :default-value (:initial-code config)}
-   {:matchBrackets true
-    :lineNumbers false
-    :autoCloseBrackets true
-    :theme "monokai"
-    :mode "clojure"}])

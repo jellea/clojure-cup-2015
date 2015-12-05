@@ -29,6 +29,12 @@ body {
     background-color: #A00000;
 }
 
-.results {
-    margin-top: 10px;
+.input {
+    width: 600px;
+}
+
+canvas {
+    position: fixed;
+    top: 5px;
+    right: 5px;
 }
