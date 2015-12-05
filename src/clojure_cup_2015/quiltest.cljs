@@ -388,26 +388,27 @@ start-loop
 (defn black-stroke []
   (q/stroke 0 0 0))
 
+(defn draw-color-and-shape []
+  (fill-orange)
+  ;;            x1  y1  x2 y2
+  (q/rect       50  50  100 100)
+
+  (fill-blue)
+  (q/no-stroke)
+  ;;             x   y  width  height
+  (q/ellipse    90 250     90     70)
+
+  (fill-pink)
+  (black-stroke)
+  ;;            x1  y1    x2 y2     x3  y3
+  (q/triangle  200  20   175 75    250  75)
+
+  ;;            x1   y1    x2  y2
+  (q/line      230  150   290 220)
+  (q/line      230  220   290 150))
+
 (create-canvas "color-and-shape")
-(defsketch shapes
+(defsketch color-and-shape
   :host "color-and-shape"
   :size [300 300]
-  :draw (fn []
-          (fill-orange)
-          ;;            x1  y1  x2 y2
-          (q/rect       50  50  100 100)
-
-          (fill-blue)
-          (q/no-stroke)
-          ;;             x   y  width  height
-          (q/ellipse    90 250     90     70)
-
-          (fill-pink)
-          (black-stroke)
-          ;;            x1  y1    x2 y2     x3  y3
-          (q/triangle  200  20   175 75    250  75)
-
-          ;;            x1   y1    x2  y2
-          (q/line      230  150   290 220)
-          (q/line      230  220   290 150)
-          ))
+  :draw draw-color-and-shape)
