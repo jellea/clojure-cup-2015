@@ -60,7 +60,6 @@
         [:a {:href "#"} [:i {:class "fa fa-check fa-lg" :on-click dismiss!}]]
         [:p "ERROR"]
         [:p error]])
-     [:h2 "Bang bang"]
      [editor "(+ 3 2)"]]))
 
 (reagent/render-component [bang-bang]

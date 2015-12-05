@@ -28,3 +28,22 @@ body {
     background-color: #A00000;
 }
 
+.editor {
+    width: 450px;
+    height: 300px;
+    border: 1px solid #73AD21;
+}
+
+.left {
+    border: 1px solid red;
+
+    width: 450px;
+    height: 300px;
+}
+
+.right {
+    border: 1px solid red;
+
+    width: 450px;
+    height: 300px;
+}
