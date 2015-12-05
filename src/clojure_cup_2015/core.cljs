@@ -9,9 +9,26 @@
             [cljsjs.codemirror.mode.clojure]
             [cljsjs.codemirror.addon.edit.matchbrackets]
             [cljsjs.codemirror.addon.fold.foldgutter]
-            [cljsjs.codemirror.addon.edit.closebrackets]))
+            [cljsjs.codemirror.addon.edit.closebrackets]
+            [clojure-cup-2015.content :as content]))
 
 (enable-console-print!)
+
+(defn canvas-editor
+  "Code mirror + a canvas, so quil can render to it"
+  [id default-code]
+  [:div
+   [cm-editor {:on-change eval :default-value default-code} {}]
+   [:canvas {:id id}]])
+
+(defn inject-editors
+  "Replace [:quil-code ...] in the content data with canvas-editor components."
+  [c]
+  (if (vector? c)
+    (if (= :quil-code (first c))
+      (into [canvas-editor] (rest c))
+      (mapv inject-editors c))
+    c))
 
 (defn error! [error]
   (swap! !state assoc :error error))
@@ -50,6 +67,7 @@
   [:div
    [error-display]
    [:div {:style {:width "600px"}}
+    (inject-editors content/chapter-1)
     [cm-editor
      {:on-change eval
       :default-value (:initial-code config)}
