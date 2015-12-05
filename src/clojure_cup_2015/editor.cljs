@@ -6,7 +6,8 @@
            :lineNumbers false
            :autoCloseBrackets true
            :theme "monokai"
-           :mode "clojure"})
+           :mode "clojure"
+           :lineWrapping true})
 
 (defn move-canvas
   [cm]
@@ -50,6 +51,9 @@
       (let [eval-code #((:on-change props) (.getValue %))
             editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js (merge opts cm-opts)))]
         (eval-code editor)
+        (add-inline {:line 0 :ch 100 :text "hi"} editor)
+        (when (:monoline props)
+          (js/oneLineCM editor))
         (.on editor "change" eval-code)
         (.on editor "cursorActivity" move-canvas)
         (reagent/set-state this {:editor editor})))

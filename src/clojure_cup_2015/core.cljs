@@ -29,6 +29,10 @@
    [:div.output [:canvas.right {:id id}]]
    [:div [cm-editor {:on-change reload! :default-value default-code} {}]]])
 
+(defn monoline-editor
+  [id default-code]
+  [:div [cm-editor {:on-change reload! :default-value default-code :monoline true} {:scrollbarStyle "null"}]])
+
 (defn inject-editors
   "Replace [:quil-code ...] in the content data with canvas-editor components."
   [c]
