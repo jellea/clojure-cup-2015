@@ -19,36 +19,7 @@
 
 (declare eval)
 
-(def config
-  {:initial-code "(+ 1 4)"})
-
-(defonce !state (atom {:code "(* 3 8)"}))
-
 (defonce cljs-compiler-state (cljs/empty-state))
-
-(defn cm-editor
-  [props {:as cm-opts :or {matchBrackets true
-                           lineNumbers false
-                           autoCloseBrackets true
-                           theme "monokai"
-                           mode "clojure"}}]
-  (reagent/create-class
-   {:component-did-mount
-    (fn [this]
-      (let [editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js cm-opts))]
-        (.on editor "change" #((:on-change props) (.getValue %)))
-        (reagent/set-state this {:editor editor})))
-
-    :should-component-update
-    (fn [this]
-      (let [editor  (:editor (reagent/state this))
-            val     (:code (:code @!state))
-            update? (not= val (.getValue editor))]
-        (when update? (.setValue editor val))
-        update?))
-
-    :reagent-render
-    (fn [_] [:textarea {:default-value (:default-value props)}])}))
 
 (defn canvas-editor
   "Code mirror + a canvas, so quil can render to it"
