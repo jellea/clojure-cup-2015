@@ -1,7 +1,8 @@
 (ns clojure-cup-2015.core
   (:require [reagent.core :as reagent :refer [atom]]
             [cljs.js :as cljs]
-            [cljs.tools.reader :as r]))
+            [cljs.tools.reader :as r]
+            [cljsjs.codemirror]))
 
 (defn q [selector] (.querySelector js/document selector))
 
@@ -19,11 +20,14 @@
 
 (enable-console-print!)
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defn editor [])
+
+(memoize (let [cm (js/CodeMirror (.getElementById js/document "editor"))]
+           #js {:value "(+ 1 1)"}))
 
 (defn bang-bang []
   [:div
-   [:h1 (:text @app-state)]
+   [:h1 "WORDL HELLO"]
    [:form {:on-click try-it}
     [:input {:id "my-text", :type :text, :value "(+ 3 11)"}]
     [:input {:type :button, :value "Eval"}]]])
