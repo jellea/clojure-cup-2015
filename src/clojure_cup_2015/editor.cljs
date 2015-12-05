@@ -40,8 +40,10 @@
   (reagent/create-class
    {:component-did-mount
     (fn [this]
-      (let [editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js (merge opts cm-opts)))]
-        (.on editor "change" #((:on-change props) (.getValue %)))
+      (let [eval-code #((:on-change props) (.getValue %))
+            editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js (merge opts cm-opts)))]
+        (eval-code editor)
+        (.on editor "change" eval-code)
         (reagent/set-state this {:editor editor})))
 
     :should-component-update
