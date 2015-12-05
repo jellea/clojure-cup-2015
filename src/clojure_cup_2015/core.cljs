@@ -2,7 +2,13 @@
   (:require [reagent.core :as reagent :refer [atom]]
             [cljs.js :as cljs]
             [cljs.tools.reader]
-            [cljsjs.codemirror]))
+            [cljsjs.codemirror]
+            [cljsjs.codemirror]
+            [cljsjs.codemirror.mode.clojure]
+            [cljsjs.codemirror.addon.edit.matchbrackets]
+            [cljsjs.codemirror.addon.fold.foldgutter]
+            [cljsjs.codemirror.addon.edit.closebrackets]
+            [clojure-cup-2015.content :as content]))
 
 (enable-console-print!)
 
@@ -57,7 +63,7 @@
     [:div
      (when error
        [:div.error
-        [:a {:href "#"} [:i {:class "fa fa-check fa-lg" :on-click dismiss!}]]
+        [:a {:href "#"} [:i.white {:on-click dismiss!} "X"]]
         [:p "ERROR"]
         [:p error]])]))
 
@@ -67,16 +73,16 @@
 
 (defn bang-bang []
   [:div
+   "hihi"
    [error-display]
-   [cm-editor {:on-change     eval
-               :default-value (:initial-code config)}
-    {:mode              "text/x-clojure"
-     :theme             "solarized light"
-     :matchBrackets     true
+   [cm-editor
+    {:on-change eval
+     :default-value (:initial-code config)}
+    {:matchBrackets true
+     :lineNumbers false
      :autoCloseBrackets true
-     :styleActiveLine   true
-     :lineNumbers       true
-     :autofocus         true}]
+     :theme "monokai"
+     :mode "clojure"}]
    [result-display]])
 
 (reagent/render-component [bang-bang]
