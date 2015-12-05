@@ -283,11 +283,11 @@
 
 (defn make-require-str []
   (str
-   "(:require [quil.core :as q :refer ["
+   "(:require [quil.core :as q \n  :refer [\n"
    (s/join " " functions)
-   "]"
-   ":refer-macros ["
-   (s/join "" macros)
-   "]]"
-   "[quil.middleware :as m]")
+   "\n]\n"
+   "  :refer-macros [\n"
+   (s/join " " macros)
+   "\n]]\n"
+   "[quil.middleware :as m])")
   )
