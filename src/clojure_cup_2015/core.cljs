@@ -49,7 +49,8 @@
     (cljs/eval-str st in-str 'fiddle.runtime
                    {:eval cljs/js-eval
                     :ns 'fiddle.runtime
-                    :verbose true
+                    ;;:verbose true
+
                     ;; don't ask me why this works. It stops Clojurescript from complaining that
                     ;; *load-fn* isn't defined
                     :load (fn [_ cb] (cb {:lang :clj :source ""}))}
@@ -78,7 +79,7 @@
 (defn bang-bang []
   [:div
    [error-display]
-   [:div.input (inject-editors content/chapter-1)]])
+   [:div.input (inject-editors content/all)]])
 
 (defn on-js-reload [])
 

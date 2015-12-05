@@ -235,7 +235,7 @@
     frame-rate
     height
     no-cursor
-    sketch
+    ;;sketch
     target-frame-rate
     width
     ;; INPUT ;;
@@ -282,11 +282,22 @@
 
 (def macros '[defsketch with-fill with-stroke with-translation])
 
+(def live-sketches (atom {}))
+
+(defn sketch-wrapper [& {:keys [host] :as opts}]
+  (when-let [sketch (get @live-sketches host)]
+    (.exit sketch))
+  (let [new-sketch (apply quil.core/sketch (apply concat opts))]
+    (swap! live-sketches assoc host new-sketch))
+)
+
 (defn import-symbols-src
   "A hack to make quil functions available in the main namespace, generates a
   string that looks like (def fill quil.core/fill), which we then eval."
   []
-  (str/join "\n" (map #(str "(def " % " quil.core/" % ")") functions)))
+  (str
+   (str/join "\n" (map #(str "(def " % " quil.core/" % ")") functions))
+   "(def sketch clojure-cup-2015.quil-symbols/sketch-wrapper)"))
 
 ;; (defn make-require-str []
 ;;   (str
