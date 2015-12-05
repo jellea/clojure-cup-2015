@@ -6,12 +6,13 @@ body {
 }
 
 .CodeMirror {
-  font-family: "Input Mono Comp Md";
+  font-family: "Input Mono Comp";
   font-style: normal;
   font-weight: normal;
   padding: 15px;
   background-color: #2C2C2C;
   color: white;
+  height: auto;
 }
 
 #bang textarea {
@@ -26,12 +27,6 @@ body {
     padding: 5px;
     color: white;
     background-color: #A00000;
-}
-
-.editor {
-    width: 450px;
-    height: 300px;
-    border: 1px solid #73AD21;
 }
 
 .results {
