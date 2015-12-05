@@ -4,7 +4,8 @@
   [:div
    [:p "Quil lets you do visual programming. You can make drawings and animations, and give instant feedback to user interaction."]
    [:p "A Quil program is called a sketch. Here's a sketch of three pink triangles on a blue background."]
-   [:quil-code "pink-triangles" "(defn draw-pink-triangles []
+   [:quil-code
+    "pink-triangles" "(defn draw-pink-triangles []
   (no-stroke)
 
   (fill 244 213 221) ;; #f4d5dd

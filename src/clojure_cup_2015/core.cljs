@@ -7,7 +7,8 @@
             [cljsjs.codemirror.mode.clojure]
             [cljsjs.codemirror.addon.edit.matchbrackets]
             [cljsjs.codemirror.addon.fold.foldgutter]
-            [cljsjs.codemirror.addon.edit.closebrackets]))
+            [cljsjs.codemirror.addon.edit.closebrackets]
+            [clojure-cup-2015.content :as content]))
 
 (enable-console-print!)
 
@@ -17,7 +18,11 @@
 (defonce !state (atom {:code "(* 3 8)"}))
 
 (defn cm-editor
-  [props cm-opts]
+  [props {:as cm-opts :or {matchBrackets true
+                           lineNumbers false
+                           autoCloseBrackets true
+                           theme "monokai"
+                           mode "clojure"}}]
   (reagent/create-class
    {:component-did-mount
     (fn [this]
@@ -76,16 +81,10 @@
    [cm-editor
     {:on-change eval
      :default-value (:initial-code config)}
-    {:matchBrackets true
-     :lineNumbers false
-     :autoCloseBrackets true
-     :theme "monokai"
-     :mode "clojure"}]
+    {}]
    [result-display]])
 
 (defn on-js-reload [])
 
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
-
-
