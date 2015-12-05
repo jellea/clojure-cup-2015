@@ -7,7 +7,7 @@
 
 (def chapter-1
   [:div
-   [:p "Goodday, traveler."]
+   [:p "Goodday, traveler. Disinhiret your eyes, because by the time this journey ends, you will no longer trust them."]
    [:p "Quil lets you do visual programming. You can make drawings and animations, and give instant feedback to user interaction."]
    [:p "A Quil program is called a sketch."]
    [:quil-code
