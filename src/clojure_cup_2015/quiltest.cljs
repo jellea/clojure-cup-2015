@@ -418,11 +418,14 @@ start-loop
 (create-canvas "pink-triangles")
 (defn draw-pink-triangles []
   (no-stroke)
-  (fill 244 213 221) ; #f4d5dd
+
+  (fill 244 213 221) ;; #f4d5dd
   (triangle 20 20, 60 90, 15 60)
-  (fill 249 202 216) ; #f9cad8
+
+  (fill 249 202 216) ;; #f9cad8
   (triangle 220 210, 280 260, 215 240)
-  (fill 232 181 188) ; #e8b5bc
+
+  (fill 232 181 188) ;; #e8b5bc
   (triangle 150 40, 227 50, 90 170))
 
 (defsketch pink-triangles

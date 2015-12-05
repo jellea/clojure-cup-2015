@@ -3,12 +3,13 @@
             [cljs.js :as cljs]
             [cljs.tools.reader :as r]
             [cljsjs.codemirror]
-            [clojure-cup-2015.quiltest]
             [cljsjs.codemirror]
             [cljsjs.codemirror.mode.clojure]
             [cljsjs.codemirror.addon.edit.matchbrackets]
             [cljsjs.codemirror.addon.fold.foldgutter]
-            [cljsjs.codemirror.addon.edit.closebrackets]))
+            [cljsjs.codemirror.addon.edit.closebrackets]
+            [clojure-cup-2015.quiltest]
+            [clojure-cup-2015.content :as content]))
 
 (enable-console-print!)
 
