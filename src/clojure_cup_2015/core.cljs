@@ -72,7 +72,6 @@
 
 (defn bang-bang []
   [:div
-   "hihi"
    [error-display]
    [cm-editor
     {:on-change eval
