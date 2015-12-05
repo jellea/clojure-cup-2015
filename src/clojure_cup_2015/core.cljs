@@ -46,32 +46,38 @@
                    (fn [{:keys [error value]}]
                      (if error
                        (do
-                         (prn "bang")
                          (error! (->> error .-cause .-message))
                          (swap! !state assoc :result nil))
                        (do
                          (dismiss!)
                          (swap! !state assoc :result (str value))))))))
 
-(defn bang-bang []
-  (let [{:keys [result error] :as state} @!state]
+(defn error-display []
+  (let [{:keys [error]} @!state]
     [:div
      (when error
        [:div.error
         [:a {:href "#"} [:i {:class "fa fa-check fa-lg" :on-click dismiss!}]]
         [:p "ERROR"]
-        [:p error]])
-     [cm-editor {:on-change     eval
-                 :default-value (:initial-code config)}
-      {:mode              "text/x-clojure"
-       :theme             "solarized light"
-       :matchBrackets     true
-       :autoCloseBrackets true
-       :styleActiveLine   true
-       :lineNumbers       true
-       :autofocus         true}]
-     [:div result]
-     ]))
+        [:p error]])]))
+
+(defn result-display []
+  (let [{:keys [result]} @!state]
+    [:div result]))
+
+(defn bang-bang []
+  [:div
+   [error-display]
+   [cm-editor {:on-change     eval
+               :default-value (:initial-code config)}
+    {:mode              "text/x-clojure"
+     :theme             "solarized light"
+     :matchBrackets     true
+     :autoCloseBrackets true
+     :styleActiveLine   true
+     :lineNumbers       true
+     :autofocus         true}]
+   [result-display]])
 
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
