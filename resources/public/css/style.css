@@ -13,6 +13,8 @@ body {
   background-color: #2C2C2C;
   color: white;
   height: auto;
+  z-index: 100;
+  border-radius: 5px;
 }
 
 #bang textarea {
@@ -27,10 +29,6 @@ body {
     padding: 5px;
     color: white;
     background-color: #A00000;
-}
-
-.input {
-    width: 600px;
 }
 
 @keyframes swing
@@ -68,9 +66,6 @@ body {
 }
 
 .output {
-    position: fixed;
-    top: 5px;
-    right: 5px;
     transition:all 0.3s ease;
 }
 
@@ -79,4 +74,16 @@ body {
     animation: swing 1s ease;
     -webkit-animation-iteration-count: 1;
     animation-iteration-count: 1;
+}
+
+canvas {
+    transform-origin: top;
+    transition: transform 200ms ease-out;
+    transform: translateY(5px);
+    border: 5px #2C2C2C solid;
+    border-left: none;
+    width: 300px;
+    height: 300px;
+    z-index: 1;
+    border-radius: 0 5px 5px 0;
 }

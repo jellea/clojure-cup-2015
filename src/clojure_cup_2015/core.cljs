@@ -26,8 +26,8 @@
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
   [:div
-   [:div [cm-editor {:on-change reload!, :default-value default-code} {}]]
-   [:div.output [:canvas {:id id}]]])
+   [:div.output [:canvas.right {:id id}]]
+   [:div [cm-editor {:on-change reload! :default-value default-code} {}]]])
 
 (defn inject-editors
   "Replace [:quil-code ...] in the content data with canvas-editor components."

@@ -5,22 +5,27 @@
    [:h1 "Into The Land of Quil"]
    [:h2 "A Great and Valiant Journey of Derring-do"]])
 
+
 (def chapter-1
   [:div
-   [:p "Quil lets you do visual programming. You can make drawings and animations, and give instant feedback to user interaction."]
-   [:p "A Quil program is called a sketch. Here's a sketch of three pink triangles on a blue background."]
+   [:em "Goodday, traveler. Today you embark upon a journey into Quil. May your eyes be bright, for there are sights to behold."]
+   [:p "Quil lets you do visual programming. You can make drawings and animations, even interactive ones with keyboard and mouse."]
+   [:p "A Quil program is called a sketch. We set up a \"draw function\" that creates the actual visuals."]
    [:quil-code
-    "pink-triangles" "(defn draw-pink-triangles []
+    "pink-triangles" "
+;; This is the draw function which Quil will run
+(defn draw-pink-triangles []
+  ;; First we set the stage: a white background, and no borders around shapes
+  (background 255)
   (no-stroke)
 
-  (fill 244 213 221) ;; #f4d5dd
-  (triangle 20 20, 60 90, 15 60)
+  ;; Set a fill color for shapes. The numbers correspond with red - green - blue, and go up to 255
+  (fill 240 150 155)
 
-  (fill 249 202 216) ;; #f9cad8
-  (triangle 220 210, 280 260, 215 240)
-
-  (fill 232 181 188) ;; #e8b5bc
-  (triangle 150 40, 227 50, 90 170))
+  ;; Fill the width and height of the canvas with triangles
+  (doall (for [x (range 0 (width) 50)
+               y (range 0 (height) 50)]
+    (triangle (+ x 25) y, x (+ y 50), (+ x 50) (+ y 50)))))
 
 (sketch
   :host \"pink-triangles\"
@@ -29,7 +34,7 @@
 
    [:p "and something else"]
 
-   [:quil-code "tailspin" "
+   #_[:quil-code "tailspin" "
 (defn setup []
   (frame-rate 30)
   (let [max-r (/ (width) 2)
