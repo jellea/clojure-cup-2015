@@ -8,6 +8,13 @@
            :theme "monokai"
            :mode "clojure"})
 
+(defn move-canvas
+  [cm]
+  (let [canvas (.getElementById js/document "pink-triangles")
+        cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 2) "local")
+        height (max (- cmheight (.-height canvas)) 0)]
+    (set! (.. canvas -style -transform) (str "translate(-5px," height "px)"))))
+
 (defn cm-editor
   [props cm-opts]
   (reagent/create-class
@@ -15,6 +22,7 @@
     (fn [this]
       (let [editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js (merge opts cm-opts)))]
         (.on editor "change" #((:on-change props) (.getValue %)))
+        (.on editor "cursorActivity" move-canvas)
         (reagent/set-state this {:editor editor})))
 
     :should-component-update
