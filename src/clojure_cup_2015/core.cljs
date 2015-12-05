@@ -44,11 +44,18 @@
 
 (defn q [selector] (.querySelector js/document selector))
 
+
+
+
 (defn eval [in-str]
   (prn in-str)
   (let [st cljs-compiler-state]
     (cljs/eval-str st in-str 'fiddle.runtime
-                   {:eval cljs/js-eval :source-map true :ns 'fiddle.runtime}
+                   {:eval cljs/js-eval
+                    :ns 'fiddle.runtime
+                    ;; don't ask me why this works. It stops Clojurescript from complaining that
+                    ;; *load-fn* isn't defined
+                    :load (fn [_ cb] (cb {:lang :clj :source ""}))}
                    (fn [{:keys [error value]}]
                      (if error
                        (do
@@ -58,7 +65,7 @@
                          (dismiss!)
                          (swap! !state assoc :result (str value))))))))
 
-(eval (str "(ns clojurecup.user " (quil-symbols/make-require-str) ")"))
+(eval (str "(ns fiddle.runtime (:require [quil.core :as q] [quil.middleware :as m])) "))
 
 (defn error-display []
   (let [{:keys [error]} @!state]
