@@ -9,7 +9,7 @@
 (def config
   {:initial-code "(+ 1 4)"})
 
-(defonce !state (atom {:result ""}))
+(defonce !state (atom {}))
 
 (defn error! [error]
   (swap! !state assoc :error error))
@@ -61,8 +61,7 @@
         [:p "ERROR"]
         [:p error]])
      [:h2 "Bang bang"]
-     [editor "(+ 3 2)"]
-     [:p "=> " (:text @!state)]]))
+     [editor "(+ 3 2)"]]))
 
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
