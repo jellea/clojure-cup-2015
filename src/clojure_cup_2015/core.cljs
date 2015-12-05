@@ -7,8 +7,7 @@
             [cljsjs.codemirror.mode.clojure]
             [cljsjs.codemirror.addon.edit.matchbrackets]
             [cljsjs.codemirror.addon.fold.foldgutter]
-            [cljsjs.codemirror.addon.edit.closebrackets]
-            [clojure-cup-2015.content :as content]))
+            [cljsjs.codemirror.addon.edit.closebrackets]))
 
 (enable-console-print!)
 
@@ -85,11 +84,9 @@
      :mode "clojure"}]
    [result-display]])
 
+(defn on-js-reload [])
+
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
 
 
-(defn on-js-reload [])
-;; optionally touch your !state to force rerendering depending on
-;; your application
-;; (swap! !state update-in [:__figwheel_counter] inc)
