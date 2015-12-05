@@ -22,7 +22,9 @@
                    (fn [{:keys [error value]}]
                      (if error
                        (error! (->> error .-cause .-message))
-                       (swap! !state assoc :text (str value)))))))
+                       (do
+                         (dismiss!)
+                         (swap! !state assoc :text (str value))))))))
 
 (memoize
   (let [cm (js/CodeMirror (.getElementById js/document "editor")
