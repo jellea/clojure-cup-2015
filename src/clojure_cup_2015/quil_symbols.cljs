@@ -1,5 +1,6 @@
 (ns clojure-cup-2015.quil-symbols
-  (:require [clojure.string :as s]))
+  (:require [clojure.string :as s]
+            [clojure.string :as str]))
 
 (def functions
   '[;; COLOR ;;
@@ -281,13 +282,19 @@
 
 (def macros '[defsketch with-fill with-stroke with-translation])
 
-(defn make-require-str []
-  (str
-   "(:require [quil.core :as q \n  :refer [\n"
-   (s/join " " functions)
-   "\n]\n"
-   "  :refer-macros [\n"
-   (s/join " " macros)
-   "\n]]\n"
-   "[quil.middleware :as m])")
-  )
+(defn import-symbols-src
+  "A hack to make quil functions available in the main namespace, generates a
+  string that looks like (def fill quil.core/fill), which we then eval."
+  []
+  (str/join "\n" (map #(str "(def " % " quil.core/" % ")") functions)))
+
+;; (defn make-require-str []
+;;   (str
+;;    "(:require [quil.core :as q \n  :refer [\n"
+;;    (s/join " " functions)
+;;    "\n]\n"
+;;    "  :refer-macros [\n"
+;;    (s/join " " macros)
+;;    "\n]]\n"
+;;    "[quil.middleware :as m])")
+;;   )

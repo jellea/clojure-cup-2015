@@ -8,7 +8,34 @@
            :theme "monokai"
            :mode "clojure"})
 
+(defn outer-sexp
+  "Returns the outer sexp"
+  [cm]
+  (if-not (-> cm (.getTokenAt (.getCursor cm))
+              .-state
+              .-indentStack)
+    (prn "not in from")
+
+    (do
+      (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
+        (.moveH cm -1 "char"))
+      (let [start (.getCursor cm)]
+        (.moveH cm 1 "char")
+        (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
+          (.moveH cm 1 "char"))
+        (let [end (.getCursor cm)]
+          (.setSelection cm start end)
+          (.getSelection cm))))))
+
+(defn add-inline
+  "Add a inline comment/result/documentation what ever"
+  [{:keys [line ch text]} editor]
+  (let [dom-node (.createElement js/document "span")]
+    (set! (.-innerHTML dom-node) text)
+    (.setBookmark (.-doc editor) #js {:line line :ch ch} #js {:widget dom-node})))
+
 (defn cm-editor
+  "CodeMirror reagent component"
   [props cm-opts]
   (reagent/create-class
    {:component-did-mount
