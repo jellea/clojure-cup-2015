@@ -27,7 +27,7 @@
   [id default-code]
   [:div
    [:div.output [:canvas.right {:id id}]]
-   [:div [cm-editor {:on-change reload! :default-value default-code} {}]]])
+   [:div [cm-editor {:on-change reload! :default-value default-code :canvas-id id} {}]]])
 
 (defn monoline-editor
   [id default-code]
