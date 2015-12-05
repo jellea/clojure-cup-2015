@@ -9,11 +9,12 @@
            :mode "clojure"})
 
 (defn move-canvas
-  [cm]
-  (let [canvas (.getElementById js/document "pink-triangles")
-        cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 2) "local")
-        height (max (- cmheight (.-height canvas)) 5)]
-    (set! (.. canvas -style -transform) (str "translateY(" height "px)"))))
+  [cm canvas-id]
+  (when canvas-id
+    (let [canvas (.getElementById js/document canvas-id)
+          cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 15) "local")
+          height (max (- cmheight (.-height canvas)) 5)]
+      (set! (.. canvas -style -transform) (str "translateY(" height "px)")))))
 
 (defn outer-sexp
   "Returns the outer sexp"
@@ -51,7 +52,7 @@
             editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js (merge opts cm-opts)))]
         (eval-code editor)
         (.on editor "change" eval-code)
-        (.on editor "cursorActivity" move-canvas)
+        (.on editor "cursorActivity" #(move-canvas % (:canvas-id props)))
         (reagent/set-state this {:editor editor})))
 
     :should-component-update
