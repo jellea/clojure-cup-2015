@@ -1,7 +1,7 @@
 (ns clojure-cup-2015.core
   (:require [reagent.core :as reagent :refer [atom]]
             [cljs.js :as cljs]
-            [cljs.tools.reader :as r]
+            [cljs.tools.reader]
             [cljsjs.codemirror]))
 
 (enable-console-print!)
@@ -9,7 +9,27 @@
 (def config
   {:initial-code "(+ 1 4)"})
 
-(defonce !state (atom {}))
+(defonce !state (atom {:code "(* 3 8)"}))
+
+(defn cm-editor
+  [props cm-opts]
+  (reagent/create-class
+   {:component-did-mount
+    (fn [this]
+      (let [editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js cm-opts))]
+        (.on editor "change" #((:on-change props) (.getValue %)))
+        (reagent/set-state this {:editor editor})))
+
+    :should-component-update
+    (fn [this]
+      (let [editor  (:editor (reagent/state this))
+            val     (:code (:code @!state))
+            update? (not= val (.getValue editor))]
+        (when update? (.setValue editor val))
+        update?))
+
+    :reagent-render
+    (fn [_] [:textarea {:default-value (:default-value props)}])}))
 
 (defn error! [error]
   (swap! !state assoc :error error))
@@ -18,49 +38,40 @@
 
 (defn q [selector] (.querySelector js/document selector))
 
-(defn eval [in-str !result]
+(defn eval [in-str]
+  (prn in-str)
   (let [st (cljs/empty-state)]
     (cljs/eval-str st in-str 'fiddle.runtime
                    {:eval cljs/js-eval :source-map true :ns 'fiddle.runtime}
                    (fn [{:keys [error value]}]
                      (if error
-                       (error! (->> error .-cause .-message))
+                       (do
+                         (prn "bang")
+                         (error! (->> error .-cause .-message))
+                         (swap! !state assoc :result nil))
                        (do
                          (dismiss!)
-                         (reset! !result (str value))))))))
-
-(defn init-code-mirror [cm-ref !cm-obj !result !default-code]
-  (let [cm (js/CodeMirror cm-ref #js {:value @!default-code})]
-    (.on cm "change" #(let [current-code (-> cm .-doc .getValue)]
-                        (reset! !default-code current-code)
-                        (eval current-code !result)))
-    (reset! !cm-obj cm)))
-
-(defn editor [default-code]
-  (let [!local {:cm-obj nil :value default-code :result ""}
-        !cm-obj (atom nil)
-        !value  (atom default-code)
-        !result (atom nil)]
-    (reagent/create-class
-     {:component-did-mount
-      (fn [this default-code]
-        (let [cm-ref (.getDOMNode (aget this "refs" "cm"))]
-          (init-code-mirror cm-ref !cm-obj !result !value)))
-      :reagent-render
-      (fn [default-code]
-        [:div.editor
-         [:div {:ref "cm"}]
-         [:p "=>" @!result]])})))
+                         (swap! !state assoc :result (str value))))))))
 
 (defn bang-bang []
-  (let [{:keys [error] :as state} @!state]
+  (let [{:keys [result error] :as state} @!state]
     [:div
      (when error
        [:div.error
         [:a {:href "#"} [:i {:class "fa fa-check fa-lg" :on-click dismiss!}]]
         [:p "ERROR"]
         [:p error]])
-     [editor "(+ 3 2)"]]))
+     [cm-editor {:on-change     eval
+                 :default-value (:initial-code config)}
+      {:mode              "text/x-clojure"
+       :theme             "solarized light"
+       :matchBrackets     true
+       :autoCloseBrackets true
+       :styleActiveLine   true
+       :lineNumbers       true
+       :autofocus         true}]
+     [:div result]
+     ]))
 
 (reagent/render-component [bang-bang]
                           (. js/document (getElementById "app")))
