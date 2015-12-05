@@ -44,7 +44,6 @@
 (defn q [selector] (.querySelector js/document selector))
 
 (defn eval [in-str]
-  (prn in-str)
   (let [st (cljs/empty-state)]
     (cljs/eval-str st in-str 'fiddle.runtime
                    {:eval cljs/js-eval :source-map true :ns 'fiddle.runtime}
@@ -73,14 +72,14 @@
 (defn bang-bang []
   [:div
    [error-display]
-   [cm-editor
-    {:on-change eval
-     :default-value (:initial-code config)}
-    {:matchBrackets true
-     :lineNumbers false
-     :autoCloseBrackets true
-     :theme "monokai"
-     :mode "clojure"}]
+   [:div.col.col-9 [cm-editor
+                    {:on-change eval
+                     :default-value (:initial-code config)}
+                    {:matchBrackets true
+                     :lineNumbers false
+                     :autoCloseBrackets true
+                     :theme "monokai"
+                     :mode "clojure"}]]
    [result-display]])
 
 (defn on-js-reload [])
