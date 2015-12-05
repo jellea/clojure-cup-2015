@@ -28,7 +28,13 @@
                            :asset-path "js/compiled/out"
                            :output-to "resources/public/js/compiled/clojure_cup_2015.js"
                            :output-dir "resources/public/js/compiled/out"
-                           :source-map-timestamp true}}
+                           :source-map-timestamp true
+
+                           :optimizations :none
+                           :pretty-print false
+                           :static-fns true
+                           :optimize-constants true
+                           :verbose true}}
                ;; This next build is an compressed minified build for
                ;; production. You can build this with:
                ;; lein cljsbuild once min
@@ -36,8 +42,12 @@
                 :source-paths ["src"]
                 :compiler {:output-to "resources/public/js/compiled/clojure_cup_2015.js"
                            :main clojure-cup-2015.core
-                           :optimizations :advanced
-                           :pretty-print false}}]}
+
+                           :optimizations :none
+                           :pretty-print false
+                           :static-fns true
+                           :optimize-constants true
+                           :verbose true}}]}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
