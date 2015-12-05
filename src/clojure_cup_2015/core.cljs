@@ -1,5 +1,7 @@
 (ns clojure-cup-2015.core
-  (:require [reagent.core :as reagent :refer [atom]]
+  (:require [reagent.core :as reagent]
+            [clojure-cup-2015.editor :refer [cm-editor]]
+            [clojure-cup-2015.common :refer [config !state]]
             [cljs.js :as cljs]
             [cljs.tools.reader]
             [cljsjs.codemirror]
@@ -10,31 +12,6 @@
             [cljsjs.codemirror.addon.edit.closebrackets]))
 
 (enable-console-print!)
-
-(def config
-  {:initial-code "(+ 1 4)"})
-
-(defonce !state (atom {:code "(* 3 8)"}))
-
-(defn cm-editor
-  [props cm-opts]
-  (reagent/create-class
-   {:component-did-mount
-    (fn [this]
-      (let [editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js cm-opts))]
-        (.on editor "change" #((:on-change props) (.getValue %)))
-        (reagent/set-state this {:editor editor})))
-
-    :should-component-update
-    (fn [this]
-      (let [editor  (:editor (reagent/state this))
-            val     (:code (:code @!state))
-            update? (not= val (.getValue editor))]
-        (when update? (.setValue editor val))
-        update?))
-
-    :reagent-render
-    (fn [_] [:textarea {:default-value (:default-value props)}])}))
 
 (defn error! [error]
   (swap! !state assoc :error error))
@@ -72,19 +49,22 @@
 (defn bang-bang []
   [:div
    [error-display]
-   [:div.col.col-9 [cm-editor
-                    {:on-change eval
-                     :default-value (:initial-code config)}
-                    {:matchBrackets true
-                     :lineNumbers false
-                     :autoCloseBrackets true
-                     :theme "monokai"
-                     :mode "clojure"}]]
-   [result-display]])
+   [:div {:style {:width "600px"}}
+    [cm-editor
+     {:on-change eval
+      :default-value (:initial-code config)}
+     {:matchBrackets true
+      :lineNumbers false
+      :autoCloseBrackets true
+      :theme "monokai"
+      :mode "clojure"}]]
+   [:div.results
+    [result-display]]])
 
 (defn on-js-reload [])
 
-(reagent/render-component [bang-bang]
-                          (. js/document (getElementById "app")))
+(defn init []
+  (reagent/render-component bang-bang
+                            (. js/document (getElementById "app"))))
 
-
+(init)
