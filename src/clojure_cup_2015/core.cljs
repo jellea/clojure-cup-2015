@@ -33,7 +33,7 @@
 
 (defn bang-bang []
   [:div
-   [:h1 "Bang bang"]
+   [:h2 "Bang bang"]
    [:form#bang {:on-click eval-input}
     [:textarea {:id "cljs-text", :rows 4, :cols 50}
      "(+ 3 22)"]

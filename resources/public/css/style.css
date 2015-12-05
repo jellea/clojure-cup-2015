@@ -2,7 +2,7 @@
 
 body {
   font-family: "Source Serif Pro";
-  margin-left: 10px;
+  padding-left: 10px;
 }
 
 .code {
@@ -15,10 +15,10 @@ body {
 }
 
 #bang textarea {
-    margin-top: 20px;
+    margin-top: 10px;
 }
 #bang input {
     display: block;
-    margin-top: 20px;
+    margin-top: 10px;
 }
 
