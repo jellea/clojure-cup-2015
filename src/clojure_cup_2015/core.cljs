@@ -24,13 +24,14 @@
 
 (start)
 
-(defonce app-state (atom {:text "Hello world!"}))
+(defonce app-state (atom {}))
 
 (defn bang-bang []
   [:div
-   [:h1 (:text @app-state)]
-   [:form {:on-click eval-input}
-    [:input {:id "cljs-text", :type :text, :value "(+ 3 11)"}]
+   [:h1 "Bang bang"]
+   [:form#bang {:on-click eval-input}
+    [:textarea {:id "cljs-text", :rows 4, :cols 50}
+     "(+ 3 22)"]
     [:input {:type :button, :value "Eval"}]]])
 
 (reagent/render-component [bang-bang]

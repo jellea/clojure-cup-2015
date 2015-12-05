@@ -2,6 +2,7 @@
 
 body {
   font-family: "Source Serif Pro";
+  margin-left: 10px;
 }
 
 .code {
@@ -11,5 +12,13 @@ body {
   padding: 15px;
   background-color: #2C2C2C;
   color: white;
+}
+
+#bang textarea {
+    margin-top: 20px;
+}
+#bang input {
+    display: block;
+    margin-top: 20px;
 }
 
