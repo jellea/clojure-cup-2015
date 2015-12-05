@@ -6,6 +6,9 @@
 
 (enable-console-print!)
 
+(def config
+  {:initial-code "(+ 1 4)"})
+
 (defonce !state (atom {:result ""}))
 
 (defn error! [error]
