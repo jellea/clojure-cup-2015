@@ -18,7 +18,7 @@
 
 (defn q [selector] (.querySelector js/document selector))
 
-(defn eval [in-str]
+(defn eval [in-str !result]
   (let [st (cljs/empty-state)]
     (cljs/eval-str st in-str 'fiddle.runtime
                    {:eval cljs/js-eval :source-map true :ns 'fiddle.runtime}
@@ -27,13 +27,30 @@
                        (error! (->> error .-cause .-message))
                        (do
                          (dismiss!)
-                         (swap! !state assoc :text (str value))))))))
+                         (reset! !result (str value))))))))
 
-(memoize
-  (let [cm (js/CodeMirror (.getElementById js/document "editor")
-             #js {:value "(+ 1 4)"})]
-    (.on cm "change" #(eval (-> cm .-doc .getValue)))))
+(defn init-code-mirror [cm-ref !cm-obj !result !default-code]
+  (let [cm (js/CodeMirror cm-ref #js {:value @!default-code})]
+    (.on cm "change" #(let [current-code (-> cm .-doc .getValue)]
+                        (reset! !default-code current-code)
+                        (eval current-code !result)))
+    (reset! !cm-obj cm)))
 
+(defn editor [default-code]
+  (let [!local {:cm-obj nil :value default-code :result ""}
+        !cm-obj (atom nil)
+        !value  (atom default-code)
+        !result (atom nil)]
+    (reagent/create-class
+     {:component-did-mount
+      (fn [this default-code]
+        (let [cm-ref (.getDOMNode (aget this "refs" "cm"))]
+          (init-code-mirror cm-ref !cm-obj !result !value)))
+      :reagent-render
+      (fn [default-code]
+        [:div.editor
+         [:div {:ref "cm"}]
+         [:p "=>" @!result]])})))
 
 (defn bang-bang []
   (let [{:keys [error] :as state} @!state]
@@ -44,6 +61,7 @@
         [:p "ERROR"]
         [:p error]])
      [:h2 "Bang bang"]
+     [editor "(+ 3 2)"]
      [:p "=> " (:text @!state)]]))
 
 (reagent/render-component [bang-bang]
@@ -51,7 +69,6 @@
 
 
 (defn on-js-reload [])
-  ;; optionally touch your !state to force rerendering depending on
-  ;; your application
-  ;; (swap! !state update-in [:__figwheel_counter] inc)
-  
+;; optionally touch your !state to force rerendering depending on
+;; your application
+;; (swap! !state update-in [:__figwheel_counter] inc)
