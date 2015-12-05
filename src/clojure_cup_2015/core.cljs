@@ -14,18 +14,23 @@
                        (.error js/console error)
                        (println "=>" (pr-str value)))))))
 
-(defn try-it [e]
-  (eval (->> "#my-text" q .-value)))
+(defn eval-input [e]
+  (eval (->> "#cljs-text" q .-value)))
+
+(defn start []
+  )
 
 (enable-console-print!)
+
+(start)
 
 (defonce app-state (atom {:text "Hello world!"}))
 
 (defn bang-bang []
   [:div
    [:h1 (:text @app-state)]
-   [:form {:on-click try-it}
-    [:input {:id "my-text", :type :text, :value "(+ 3 11)"}]
+   [:form {:on-click eval-input}
+    [:input {:id "cljs-text", :type :text, :value "(+ 3 11)"}]
     [:input {:type :button, :value "Eval"}]]])
 
 (reagent/render-component [bang-bang]
