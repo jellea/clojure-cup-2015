@@ -14,6 +14,8 @@
 
 (enable-console-print!)
 
+(declare eval)
+
 (defn canvas-editor
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
@@ -67,15 +69,7 @@
   [:div
    [error-display]
    [:div {:style {:width "600px"}}
-    (inject-editors content/chapter-1)
-    [cm-editor
-     {:on-change eval
-      :default-value (:initial-code config)}
-     {:matchBrackets true
-      :lineNumbers false
-      :autoCloseBrackets true
-      :theme "monokai"
-      :mode "clojure"}]]
+    (inject-editors content/chapter-1)]
    [:div.results
     [result-display]]])
 
@@ -86,3 +80,13 @@
                             (. js/document (getElementById "app"))))
 
 (init)
+
+(comment
+  [cm-editor
+   {:on-change eval
+    :default-value (:initial-code config)}
+   {:matchBrackets true
+    :lineNumbers false
+    :autoCloseBrackets true
+    :theme "monokai"
+    :mode "clojure"}])
