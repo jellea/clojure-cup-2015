@@ -1,7 +1,8 @@
 (ns clojure-cup-2015.core
   (:require [reagent.core :as reagent :refer [atom]]
             [cljs.js :as cljs]
-            [cljs.tools.reader :as r]))
+            [cljs.tools.reader :as r]
+            [cljsjs.codemirror]))
 
 (defn q [selector] (.querySelector js/document selector))
 
@@ -25,6 +26,10 @@
 (start)
 
 (defonce app-state (atom {}))
+(defn editor [])
+
+(memoize (let [cm (js/CodeMirror (.getElementById js/document "editor"))]
+           #js {:value "(+ 1 1)"}))
 
 (defn bang-bang []
   [:div

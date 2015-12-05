@@ -23,8 +23,14 @@
      (q/point (* t (q/sin t))
               (* t (q/cos t))))))
 
+;; ; run sketch
+;; (defsketch trigonometry
+;;   :host "canvas-id"
+;;   :size [300 300]
+;;   :draw draw)
+
 ; run sketch
-(defsketch trigonometry
+(defsketch shapes-and-colors
   :host "canvas-id"
   :size [300 300]
-  :draw draw)
+  :draw (fn []))
