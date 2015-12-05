@@ -1,6 +1,6 @@
 (ns clojure-cup-2015.content)
 
-(defn chapter-1 []
+(def chapter-1
   [:div
    [:p "Quil lets you do visual programming. You can make drawings and animations, and give instant feedback to user interaction."]
    [:p "A Quil program is called a sketch. Here's a sketch of three pink triangles on a blue background."]

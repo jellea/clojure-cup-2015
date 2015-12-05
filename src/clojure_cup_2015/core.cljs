@@ -12,6 +12,8 @@
 
 (enable-console-print!)
 
+(declare eval)
+
 (def config
   {:initial-code "(+ 1 4)"})
 
@@ -40,6 +42,22 @@
 
     :reagent-render
     (fn [_] [:textarea {:default-value (:default-value props)}])}))
+
+(defn canvas-editor
+  "Code mirror + a canvas, so quil can render to it"
+  [id default-code]
+  [:div
+   [cm-editor {:on-change eval :default-value default-code} {}]
+   [:canvas {:id id}]])
+
+(defn inject-editors
+  "Replace [:quil-code ...] in the content data with canvas-editor components."
+  [c]
+  (if (vector? c)
+    (if (= :quil-code (first c))
+      (into [canvas-editor] (rest c))
+      (mapv inject-editors c))
+    c))
 
 (defn error! [error]
   (swap! !state assoc :error error))
@@ -78,6 +96,7 @@
 (defn bang-bang []
   [:div
    [error-display]
+   (inject-editors content/chapter-1)
    [cm-editor
     {:on-change eval
      :default-value (:initial-code config)}
