@@ -1,2 +1,15 @@
 /* some style */
 
+body {
+  font-family: "Source Serif Pro";
+}
+
+.code {
+  font-family: "Input Mono Comp Md";
+  font-style: normal;
+  font-weight: normal;
+  padding: 15px;
+  background-color: #2C2C2C;
+  color: white;
+}
+
