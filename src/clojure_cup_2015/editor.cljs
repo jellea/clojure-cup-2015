@@ -12,8 +12,8 @@
   [cm]
   (let [canvas (.getElementById js/document "pink-triangles")
         cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 2) "local")
-        height (max (- cmheight (.-height canvas)) 0)]
-    (set! (.. canvas -style -transform) (str "translate(-5px," height "px)"))))
+        height (max (- cmheight (.-height canvas)) 5)]
+    (set! (.. canvas -style -transform) (str "translateY(" height "px)"))))
 
 (defn outer-sexp
   "Returns the outer sexp"
