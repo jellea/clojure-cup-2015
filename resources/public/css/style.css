@@ -22,3 +22,9 @@ body {
     margin-top: 10px;
 }
 
+.error {
+    padding: 5px;
+    color: white;
+    background-color: #A00000;
+}
+
