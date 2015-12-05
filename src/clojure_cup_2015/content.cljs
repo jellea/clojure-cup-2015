@@ -15,26 +15,50 @@
     "pink-triangles" "
 ;; This is the draw function which Quil will run
 (defn draw-pink-triangles []
-  ;; First we set the stage: a white background, and no borders around shapes
-  (background 255)
+  ;; First we set the stage: a background color, and no borders around shapes
+  (background 20 200 151)
   (no-stroke)
 
-  ;; Set a fill color for shapes. The numbers correspond with red - green - blue, and go up to 255
-  (fill 240 150 155)
+  ;; Set a fill color for shapes. The numbers correspond with
+  ;; red - green - blue, and go up to 255
+  (fill 34 95 215)
 
   ;; Fill the width and height of the canvas with triangles
-  (doall (for [x (range 0 (width) 50)
-               y (range 0 (height) 50)]
-    (triangle (+ x 25) y, x (+ y 50), (+ x 50) (+ y 50)))))
+  (doseq [x (range 0 (width) 50)
+          y (range 0 (height) 50)]
+    (triangle (+ x 25) y
+              x (+ y 50)
+              (+ x 50) (+ y 50))))
 
 (sketch
   :host \"pink-triangles\"
   :size [300 300]
-  :draw draw-pink-triangles)"]
+  :draw draw-pink-triangles
+  :setup #(frame-rate 1))"]
 
-   [:p "and something else"]
 
-   #_[:quil-code "tailspin" "
+   [:p "That's already a lovely pattern we got going. Knit it into a turtleneck and aunt Juliet will envy you forever. But there's more, how about we get things moving a bit?"]
+
+   [:quil-code "carrousel" "(defn draw-carrousel []
+  (background 255)
+  (no-stroke)
+  (fill 252 90 44)
+
+  (let [radians (/ (frame-count) 20)
+        x (+ 150 (* 100 (cos radians)))
+        y (+ 150 (* 100 (sin radians)))
+        width 30
+        height 30]
+      (ellipse x y, width height)))
+
+(sketch
+  :host \"carrousel\"
+  :size [300 300]
+  :draw draw-carrousel)"]
+
+   [:p]
+
+   [:quil-code "tailspin" "
 (defn setup []
   (frame-rate 30)
   (let [max-r (/ (width) 2)
