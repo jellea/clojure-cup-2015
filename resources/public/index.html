@@ -30,16 +30,15 @@
           and <a href="http://processingjs.org/">Processing.js</a>.
         </p>
         <p>
-          Quil lets you do visual programming. You can even create drawings and
-          animations that interact using the keyboard and the mouse.
+          A Quil program is called a sketch. A sketch can be a simple drawing,
+          but it can also be a rich animation or an interactive visualization.
         </p>
         <p>
-          A Quil program is called a sketch. The <em>draw function</em> lies at
-          the core of the sketch and does the work of actually drawing the
-          visuals.
+          Each sketch is powered by a <em>draw function</em>, which renders
+          shapes and colors on the screen.
         </p>
         <p>
-          You'll find many sketches in this tutorial. All of them are "live",
+          You'll find many sketches in this tutorial. All of them are "live" —
           change the code and you should immediately see the sketch change.
           Hover over a Quil function name to see what it does.
         </p>
@@ -79,8 +78,7 @@
 (sketch
   :host "pine-forest"
   :size [300 300]
-  :draw #'draw-pine-forest
-  :setup #(frame-rate 1))
+  :draw #'draw-pine-forest)
         </script>
 
         <p>
@@ -122,9 +120,9 @@
         <h3>Paint Blotches</h3>
 
         <p>
-          Quil also lets you interact with the keyboard and mouse. Move your mouse
+          Quil also lets you make interactive sketches. Move your mouse
           over the canvas to smear it with thick blotches of paint that run down
-          the canvas.
+          the screen.
         </p>
 
         <p>
@@ -142,15 +140,12 @@
              [198 221 245]
              [202 216 247]])
 
-(defn- move-dots-down [state]
+(defn move-dots-down [state]
   (->> state
     (map #(update-in % [:pos 1] inc))
     (filter #(< (get-in % [:pos 1]) (height)))))
 
-(defn paint-blotch-update
-  "For each update cycle, register the new mouse position,
-  then move all dots down"
-  [state]
+(defn paint-blotch-update [state]
   (move-dots-down
     (let [x (mouse-x) y (mouse-y)]
       (if (and (> x 0) (> y 0) (< x (width)) (< y (height)))
@@ -184,14 +179,14 @@
         <p>
           To get Quil to draw something on the screen, you need a <tt>:draw</tt>
           function. You pass this function on to Quil when you call <tt>(sketch
-          ,,,)</tt>. Quil accepts other functions as well, like
+          ...)</tt>. Quil accepts other functions as well, like
           a <tt>:setup</tt> function, which is called once when your sketch
           starts to run.
         </p>
         <p>
           The <tt>:host</tt> is the HTML <tt>id</tt> of the canvas element,
-          which is where Quil will draw your sketch. In this tutorial, we have
-          already set up a canvas for you, so no need to worry about that.
+          which is where Quil will draw your sketch. In this tutorial, all the
+          canvases are already set up for you, so no need to worry about that.
         </p>
 
         <h2>The Quil API</h2>
@@ -250,14 +245,14 @@
   about <tt>background</tt>, which is really a lot like a draw function in its
   own right, since it refills the whole canvas. Shapes like rectangles or
   triangles on the other hand depend on a <em>fill</em> color, and
-  a <em>stroke</em>, which has a color and
+  a <em>stroke</em>. The stroke has a color and
   a <em>stroke-weight</em>, the width of the stroke in pixels.
 </p>
 
 <p>
   By default all colors are specified
-  in <a href="https://en.wikipedia.org/wiki/RGB_color_space">"rgb"</a>, meaning
-  red - green - blue, with values between 0 and 255. the color space. Try and
+  in the <a href="https://en.wikipedia.org/wiki/RGB_color_space">RGB</a> color space, meaning
+  red - green - blue, with values between 0 and 255. Try and
   see how the colors change as you modify the three numbers!
 </p>
 
@@ -268,7 +263,7 @@
 
   ;; Set up drawing properties for the shapes that follow
   (stroke 214 240 248)
-  (stroke-weight 1)
+  (stroke-weight 10)
   (fill 34 95 215)
 
   ;; Draw the rectangle
@@ -284,7 +279,9 @@
   Drawing a circle isn't any harder. While Quil does not come with a
   special function for drawing circles, it supplies a function for the general
   case of drawing ovals (or ellipses). That will work well — after all, a
-  circle is just an ellipse with equal horizontal and vertical dimensions.
+  circle is just an ellipse that is as high as it is wide.
+</p>
+<p>
   The <tt>ellipse</tt> function takes the same arguments
   as <tt>rect</tt>: <tt>x</tt>, <tt>y</tt>, <tt>width</tt> and <tt>height</tt>.
   However, whereas in the case of <tt>rect</tt> the point <tt>(x,y)</tt>
@@ -304,8 +301,7 @@
 (sketch
   :host "circle"
   :size [300 300]
-  :draw #'draw-circle
-  :setup #(frame-rate 1))
+  :draw #'draw-circle)
 </script>
 
         <h2>Animation and State</h2>
@@ -315,7 +311,7 @@
         </p>
 
         <p>
-          This next sketch is an adaptation of a sketch by by Erik Svedäng.
+          This next sketch is an adaptation of <a href="http://quil.info/sketches/show/example_hyper">a sketch by by Erik Svedäng</a>.
         </p>
 
         <script type="cljs" class="editor" data-cmid="hyper">
@@ -361,21 +357,26 @@
         <h2>Advanced Examples</h2>
 
         <p>
-          These examples are taken from the Quil site. Can you find out how they work?
+          These examples are taken from the <a href="http://quil.info/examples">Quil site</a>. Can you find out how they work?
         </p>
 
         <h3>Tailspin by Erik Svedäng</h3>
 
+        <p>
+          <a href="http://quil.info/sketches/show/example_tailspin">Tailspin by Erik Svedäng on Quil.info</a>
+        </p>
+
         <script type="cljs" class="editor" data-cmid="tailspin">
+
 (defn setup []
   (frame-rate 30)
   (let [max-r (/ (width) 2)
-        n (int (map-range (width)
-                            200 500
-                            20 50))]
-   {:dots (into [] (for [r (map #(* max-r %)
-                                (range 0 1 (/ n)))]
-                     [r 0]))}))
+              n (int (map-range (width)
+                                200 500
+                                20 50))]
+    {:dots (into [] (for [r (map #(* max-r %)
+                                 (range 0 1 (/ n)))]
+                         [r 0]))}))
 
 (def speed 0.0003)
 
@@ -395,17 +396,25 @@
   (fill 0)
   (let [dots (:dots state)]
     (loop [curr (first dots)
-           tail (rest dots)
-           prev nil]
-      (let [[x y] (dot->coord curr)]
-        (ellipse x y 5 5)
-        (when prev
-          (let [[x2 y2] (dot->coord prev)]
-            (line x y x2 y2))))
-      (when (seq tail)
-        (recur (first tail)
-               (rest tail)
-               curr)))
+                tail (rest dots)
+                prev nil]
+          (let [[x y] (dot->coord curr)]
+            (ellipse x y 5 5)
+            (when prev
+              (let [[x2 y2] (dot->coord prev)]
+                (line x y x2 y2))))
+          (when (seq tail)
+            (recur (first tail)
+                   (rest tail)
+                   curr)))))
+
+(sketch
+ :host "tailspin"
+ :size [300 300]
+ :setup #'setup
+ :update #'update-state
+ :draw #'draw-state
+ :middleware [m/fun-mode])
          </script>
 
         <h2>About Us</h2>
