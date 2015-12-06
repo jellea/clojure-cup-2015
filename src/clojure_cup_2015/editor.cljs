@@ -68,16 +68,28 @@
   (when error
     (println "Error:" error)))
 
-(defn bam [& args]
-  (throw (ex-info "Cljs warning" {:args args}))
-  (prn "BAM BAM BAM"))
+(defn warning-hook [& args]
+  (throw (ex-info "Cljs warning" {:args args})))
+
+
+(defn find-error [{:keys [error value]} id]
+  (if error
+    (do
+      (error! {:message (->> error .-cause .-message)
+               :id id})
+      (swap! !state assoc :result nil))
+    (do
+      (dismiss!)
+      (swap! !state assoc :result (str value)))))
 
 (defn eval
   ([name-space in-str]
    (eval name-space in-str #()))
+
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
-     (binding [cljs.analyzer/*cljs-warning-handlers* [bam]]
+     (prn name-space)
+     (binding [cljs.analyzer/*cljs-warning-handlers* [warning-hook]]
        (cljs/eval-str st in-str (symbol name-space)
                       {:eval cljs/js-eval
                        :ns (symbol name-space)
@@ -86,14 +98,7 @@
                        ;; don't ask me why this works. It stops Clojurescript from complaining that
                        ;; *load-fn* isn't defined
                        :load (fn [_ cb] (cb {:lang :clj :source ""}))}
-                      (fn [{:keys [error value]}]
-                        (if error
-                          (do
-                            (error! (->> error .-cause .-message))
-                            (swap! !state assoc :result nil))
-                          (do
-                            (dismiss!)
-                            (swap! !state assoc :result (str value))))))))))
+                      callback)))))
 
 (defn cm-editor
   "CodeMirror reagent component"
@@ -116,9 +121,19 @@
           (js/oneLineCM editor))
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
-                                              on-evaluated)))
+                                              (fn [e] (find-error e id)))))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
+
+    ; :did-unmount
+    ; (fn [this]
+    ;  (let [sketches quil-symbols/live-sketches
+    ;        dom-node (reagent/dom-node this)
+    ;        editor (.fromTextArea js/CodeMirror dom-node opts)]
+    ;   (doseq [e ["change" "cursorActivity"]]
+    ;     (.off editor e))
+    ;   (.exit (get sketches (:id props)))
+    ;   (swap! sketches dissoc (:id props))))
 
     :should-component-update
     (fn [this]

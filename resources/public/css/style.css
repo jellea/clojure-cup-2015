@@ -64,7 +64,7 @@ canvas {
     border-radius: 5px;
     padding: 10px;
     transform-origin: bottom;
-    transform: translate(-10px,-60px);
+    transform: translate(-10px,-61px);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -79,7 +79,7 @@ canvas {
 }
 
 .error:before {
-    content: "\2639";
+    content: "\2639 ";
     font-size: 16px;
 }
 
@@ -87,5 +87,5 @@ canvas {
     from {opacity: 0;
           transform: translate(-10px,0px);}
     to   {opacity: 1;
-          transform: translate(-10px,-60px);}
+          transform: translate(-10px,-61px);}
 }

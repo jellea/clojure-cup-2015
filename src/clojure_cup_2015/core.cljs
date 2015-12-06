@@ -22,11 +22,12 @@
 (defn q [selector] (.querySelector js/document selector))
 (defn by-id [id] (.getElementById js/document id))
 
-(defn error-display []
-  (let [{:keys [error]} @!state]
+(defn error-display [id]
+  (let [{:keys [error]} @!state
+        cid (:id error)]
     [:div
-     (when error
-       [:p.error error])]))
+     (when (and error (= id cid))
+       [:p.error (:message error)])]))
 
 (defn canvas-editor
   "Code mirror + a canvas, so quil can render to it"
@@ -34,8 +35,7 @@
   [:div
    [:div.right.holder {:id (str id "_holder")}
     [:canvas {:id id}]
-    [:i {:class "fa fa-lg fa-history"}]
-    [error-display]]
+    [error-display id]]
    [cm-editor {:default-value default-code :id id} {}]])
 
 (defn monoline-editor
@@ -45,23 +45,11 @@
                     :id id}
          {:scrollbarStyle "null"}]])
 
-(defn inject-editors
-  "Replace [:quil-code ...] in the content data with canvas-editor components."
-  [c]
-  (if (vector? c)
-    (if (= :quil-code (first c))
-      (into [canvas-editor] (rest c))
-      (mapv inject-editors c))
-    c))
-
-(defn bang-bang []
-  [:div
-   [:div.input (inject-editors content/all)]])
-
 (defn on-js-reload [])
 
 (defn mirrorize-one! [e]
-  (let [cmid (d/attr e "data-cmid")
+  (let [cmtype (d/attr e "data-cmtype")
+        cmid (d/attr e "data-cmid")
         text (->> e .-text clojure.string/trim)
         new (d/create-element :div)]
     (d/remove-class! e "editor") ;; only replace once (d/add-class! editor "cm")
