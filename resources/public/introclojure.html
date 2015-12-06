@@ -28,12 +28,12 @@
         Strings
       </h4>
       <p>What is a string? A string is just a piece of text. To make a string, you enclose it in quotation marks. Look at the last example. A backslash is how we put a quotation mark inside a string. Do not try using single quotes to make a string.
-        <ul>
+        <pre>
           "Hello, World!"
-        </ul>
-        <ul>
-          "Aubrey said, \"I think we should go to the Orange Julius.\""
-        </ul>
+        </pre>
+        <pre>
+          "Aubrey said, \"I think we shopred go to the Orange Jpreius.\""
+        </pre>
       </p>
       <h4>
         Booleans and nil
@@ -41,30 +41,30 @@
       <p>
         A boolean is a true or false value, and you type them just like that, true and false. Often in programming, we need to ask a true or false question, like “Is this class in the current semester?” or “Is this person’s birthday today?” When we ask those questions, we get a boolean back.
         There is another value nil, which behaves like a boolean in terms of truthiness. But, nil means no value at all and not a boolean
-        <ul>
+        <pre>
           true
-        </ul>
-        <ul>
+        </pre>
+        <pre>
           false
-        </ul>
-        <ul>
+        </pre>
+        <pre>
           nil
-        </ul>
+        </pre>
       </p>
       <h4>
         Keywords
       </h4>
       <p>
         Keywords are the strangest of the basic value types. Some computer languages have similar one. However, keywords don’t have a real world analog like numbers, strings, or booleans. You can think of them as a special type of string, one that’s used for labels. They are often used as keys of key-value pair for maps (data structure; will learn later).
-        <ul>
+        <pre>
           :trinity
-        </ul>
-        <ul>
+        </pre>
+        <pre>
           :first
-        </ul>
-        <ul>
+        </pre>
+        <pre>
           :last
-        </ul>
+        </pre>
       </p>
       <h4>
         Numbers
@@ -72,18 +72,20 @@
       <p>
         Clojure has several different types of numbers.
         First up are integers. Integers include zero, the positive whole numbers, and the negative whole numbers, and you write them just like we write them normally.
-        <ul>
+      </p>
+        <pre>
           0, 12, -42
-        </ul>
-        Then we have decimal numbers, which are also called floats. They include any numbers that have a decimal point in them.
-        <ul>
+        </pre>
+        <p>Then we have decimal numbers, which are also called floats. They include any numbers that have a decimal point in them.
+        </p>
+        <pre>
           0.0000072725, 10.5, -99.9
-        </ul>
-        Finally, we have fractions, which are also called ratios. Computers cannot perfectly represent all floats, but ratios are always exact. We write them with a slash, like so:
+        </pre>
+        <p>Finally, we have fractions, which are also called ratios. Computers cannot perfectly represent all floats, but ratios are always exact. We write them with a slash, like so:
         Note that, just like with pen-and-paper math, the denominator of your ratio cannot be equal to 0.
-        <ul>
+        <pre>
           1/2, -7/3
-        </ul>
+        </pre>
       </p>
       <h3>
         Infix vs. prefix notation

@@ -19,8 +19,13 @@ body {
   padding: 2em;
 }
 
-h1,h2,p,em,i,span {
-  max-width: 40em;
+h1,h2,h4,p,em,i,span {
+  max-width: 600px;
+}
+
+
+pre {
+  font-family: "Input Mono Comp";
 }
 
 .CodeMirror {
