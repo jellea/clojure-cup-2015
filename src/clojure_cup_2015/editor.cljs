@@ -153,9 +153,13 @@
 
         (when (:monoline props)
           (js/oneLineCM editor)
+          (eval name-space
+                (.getValue editor)
+                (partial find-value editor))
+          
           (.on editor "change" (debounce #(eval name-space
-                                              (.getValue editor)
-                                              (partial find-value editor))
+                                                (.getValue editor)
+                                                (partial find-value editor))
                                          200)))
 
         (.addEventListener js/document "scroll"
