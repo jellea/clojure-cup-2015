@@ -18,6 +18,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+h1,h2,p,em,i,span {
+  max-width: 40em;
+}
+
 .CodeMirror {
   font-family: "Input Mono Comp";
   font-style: normal;
