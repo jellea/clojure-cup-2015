@@ -68,9 +68,20 @@
   (when error
     (println "Error:" error)))
 
+(defn find-error [{:keys [error value]} id]
+  (if error
+    (do
+      (error! {:message (->> error .-cause .-message)
+               :id id})
+      (swap! !state assoc :result nil))
+    (do
+      (dismiss!)
+      (swap! !state assoc :result (str value)))))
+
 (defn eval
   ([name-space in-str]
    (eval name-space in-str #()))
+
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
      (prn name-space)
@@ -82,14 +93,7 @@
                      ;; don't ask me why this works. It stops Clojurescript from complaining that
                      ;; *load-fn* isn't defined
                      :load (fn [_ cb] (cb {:lang :clj :source ""}))}
-                    (fn [{:keys [error value]}]
-                      (if error
-                        (do
-                          (error! (->> error .-cause .-message))
-                          (swap! !state assoc :result nil))
-                        (do
-                          (dismiss!)
-                          (swap! !state assoc :result (str value)))))))))
+                    callback))))
 
 (defn cm-editor
   "CodeMirror reagent component"
@@ -112,7 +116,7 @@
           (js/oneLineCM editor))
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
-                                              on-evaluated)))
+                                              (fn [e] (find-error e id)))))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
