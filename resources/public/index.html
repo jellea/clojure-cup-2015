@@ -148,7 +148,7 @@
 (defn move-dots-down [state]
   (->> state
     (map #(update-in % [:pos 1] inc))
-    (filter #(< (get-in % [:pos 1]) (height)))))
+    (filter #(< (get-in % [:pos 1]) (+ 25 (height))))))
 
 (defn paint-blotch-update [state]
   (move-dots-down
@@ -315,9 +315,58 @@
           Drawing shapes is good, but making them move is better!
         </p>
 
+
+        <h3>Slider</h3>
+
+<p>
+  There are a few different ways you can create animations in Quil. You already
+  saw the Carrousel example above, which used the current <tt>(frame-count)</tt>
+  and based the rendering of each frame on that.
+</p>
+
+<p>
+  You can change the frame rate, the number of frames Quil renders per second, with <tt>(frame-rate n)</tt>. This will change the speed of animations based on frame-count.
+</p>
+
+<p>
+Another approach is the use the current time in miliseconds, this way we have a way to measure passing time independent of the the current frame rate. Quil provides the handy <tt>(milis)</tt> function for that.
+</p>
+
+<p>
+In this next example we use <tt>(milis)</tt> to calculate a horizontal position.
+With Clojure's <tt>mod</tt> function (modulo, in other words the remainder after
+division), we let the animation wrap around again.
+</p>
+        <script type="cljs" class="editor" data-cmid="slider">
+(def shape-size 20)
+
+(defn draw-state []
+  (background 255)
+  (fill 100 50 250)
+  (let [pos (* 0.2 (millis)) ;; use a factor to slow things down
+        x (mod pos (+ (width) shape-size))] ;; let the shapes go off the screen, then wrap
+     (doseq [y (range 0 (height) shape-size)]
+       (triangle x y
+                 x (+ y shape-size)
+                 (+ x shape-size) (+ y shape-size)))))
+
+(sketch
+  :host "slider"
+  :size [300 300]
+  :draw #'draw-state)
+</script>
+
+        <h3>Hyper</h3>
+
         <p>
           This next sketch is an adaptation of <a href="http://quil.info/sketches/show/example_hyper">a sketch by by Erik Svedäng</a>.
         </p>
+
+<p>
+  This is an example of a sketch that uses state. The initial state is returned
+  by <tt>setup</tt> And <tt>update-state</tt> continually updates that state, in
+  this case growing the radius, or changing the color. Draw in turn can then use that state.
+</p>
 
         <script type="cljs" class="editor" data-cmid="hyper">
 (defn new-state []
@@ -432,10 +481,10 @@
         <script type="cljs" class="editor" data-cmid="dry-paint">
 (defn pulse [low high rate millis]
   (let [diff (- high low)
-             half (/ diff 2)
-             mid (+ low half)
-             s (/ millis 1000.0)
-             x (sin (* s (/ 1.0 rate)))]
+        half (/ diff 2)
+        mid (+ low half)
+        s (/ millis 1000.0)
+        x (sin (* s (/ 1.0 rate)))]
     (+ mid (* x half))))
 
 (def letter-Q [[3 2] [2 3] [2 4] [2 5] [2 6] [3 7]
