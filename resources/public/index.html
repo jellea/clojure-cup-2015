@@ -207,17 +207,16 @@
         <h2>Drawing shapes</h2>
 
         <p>
-          When you draw a shape, it stays on the canvas until you draw
-          something on top of it. You can see this well in the last example.
-          <tt>(background r g b)</tt> will refill the whole canvas with a solid
-          color, so you can use it in your draw function to clear the canvas
-          before drawing the new frame. Replace <t>r</t>, <t>g</t> and <t>b</t>
-          by integers between 0 and 255 that represents red, green and blue
-          components in
-          the <a href="https://en.wikipedia.org/wiki/RGB_color_space">RGB</a>
-          color space. Try and see how the colors change as you modify the three
-          nubmers!
-</p>
+          When you draw a shape, it stays on the canvas until you draw something
+        on top of it. You can see this well in the last example, where the new
+        "paint" is drawn on top of the old..
+        </p>
+
+        <p>
+          With <tt>(background ...)</tt> you can get it a clean slate, since it
+          will refill the whole canvas with a solid color. You can use it in
+          your draw function to clear the canvas before drawing the new frame.
+        </p>
 
 <p>
   One of the easiest things you can draw is a rectangle. Quil's <tt>rect</tt>
@@ -229,19 +228,56 @@
   centered equilateral rectangle or square.
 </p>
 
+<script type="cljs" class="editor" data-cmid="plain-rect">
+(defn draw-rect []
+  ;; Draw the rectangle
+  (rect 50 50 200 200))
+
+(sketch
+  :host "plain-rect"
+  :size [300 300]
+  :draw #'draw-rect)
+</script>
+
+<p>
+  By default Quil draws shapes with a light gray fill color, and a thin black
+  border, on a dark gray background. Unless normcore becomes even more... norm,
+  this color scheme won't win many prizes.
+</p>
+
+<p>
+  To spice things up let's add some color! We already talked
+  about <tt>background</tt>, which is really a lot like a draw function in its
+  own right, since it refills the whole canvas. Shapes like rectangles or
+  triangles on the other hand depend on a <em>fill</em> color, and
+  a <em>stroke</em>, which has a color and
+  a <em>stroke-weight</em>, the width of the stroke in pixels.
+</p>
+
+<p>
+  By default all colors are specified
+  in <a href="https://en.wikipedia.org/wiki/RGB_color_space">"rgb"</a>, meaning
+  red - green - blue, with values between 0 and 255. the color space. Try and
+  see how the colors change as you modify the three numbers!
+</p>
+
 <script type="cljs" class="editor" data-cmid="rect">
 (defn draw-rect []
+  ;; Fill the background with a solid color
   (background 20 200 151)
-  (no-stroke)
+
+  ;; Set up drawing properties for the shapes that follow
+  (stroke 214 240 248)
+  (stroke-weight 1)
   (fill 34 95 215)
 
+  ;; Draw the rectangle
   (rect 50 50 200 200))
 
 (sketch
   :host "rect"
   :size [300 300]
-  :draw #'draw-rect
-  :setup #(frame-rate 1))
+  :draw #'draw-rect)
 </script>
 
 <p>
@@ -260,7 +296,7 @@
 <script type="cljs" class="editor" data-cmid="circle">
 (defn draw-circle []
   (background 20 200 151)
-  (no-stroke)
+  (no-stroke) ;; use this if you don't want a border around your shapes
   (fill 34 95 215)
 
   (ellipse 150 150 200 200))
@@ -274,6 +310,52 @@
 
         <h2>Animation and State</h2>
 
+        <p>
+          Drawing shapes is good, but making them move is better!
+        </p>
+
+        <p>
+          This next sketch is an adaptation of a sketch by by Erik Svedäng.
+        </p>
+
+        <script type="cljs" class="editor" data-cmid="hyper">
+(defn new-state []
+  {:radius 0.0
+   :color [(random 200 255) (random 0 150) (random 100 255)]})
+
+(defn setup []
+  (frame-rate 100)
+  (background 255)
+  (rect-mode :center)
+  (new-state))
+
+(defn tick [state]
+  (update-in state [:radius] + 5.0))
+
+(defn update-state [state]
+  (if (< (:radius state) 300)
+    (tick state)
+    (new-state)))
+
+(defn draw-state [state]
+  (apply stroke (:color state))
+  (let [hw (* 0.5 (width))
+        hh (* 0.5 (height))]
+    (dotimes [_ (quot (width) 10)]
+      (let [rand-ang (random 0 q/TWO-PI)
+            r (:radius state)]
+        (line hh hw
+              (+ hh (* (sin rand-ang) r))
+              (+ hw (* (cos rand-ang) r)))))))
+
+(sketch
+  :host "hyper"
+  :size [300 300]
+  :setup #'setup
+  :update #'update-state
+  :draw #'draw-state
+  :middleware [m/fun-mode])
+         </script>
 
 
         <h2>Advanced Examples</h2>
@@ -282,8 +364,9 @@
           These examples are taken from the Quil site. Can you find out how they work?
         </p>
 
-        <h3><a href="https://github.com/quil/quil-site/blob/master/src/cljs/quil_site/examples/tailspin.cljs">Tailspin by Erik Svedäng</a></h3>
-<script type="cljs" class="editor" data-cmid="tailspin">
+        <h3>Tailspin by Erik Svedäng</h3>
+
+        <script type="cljs" class="editor" data-cmid="tailspin">
 (defn setup []
   (frame-rate 30)
   (let [max-r (/ (width) 2)
@@ -322,16 +405,32 @@
       (when (seq tail)
         (recur (first tail)
                (rest tail)
-               curr)))))
+               curr)))
+         </script>
 
-(sketch
-  :host "tailspin"
-  :size [500 500]
-  :setup #'setup
-  :update #'update-state
-  :draw #'draw-state
-  :middleware [quil.middleware/fun-mode])
-        </script>
+        <h2>About Us</h2>
+
+        <p>
+          This interactive tutorial was create during a weekend by BERLIN!!
+          (pronounced "Berlin Bang Bang")
+          for <a href="http://clojurecup.com/">ClojureCup 2015</a>.
+        </p>
+
+        <p>
+          We are Arne Brasseur, Chelsey Mitchell, Jeller Ackerman, and Paulus Esterhazy.
+        </p>
+
+        <p>
+          All code is available under
+          the <a href="http://www.eclipse.org/legal/epl-v10.html">Eclipe Public
+          License</a> and can be
+          found <a href="https://github.com/jellea/clojure-cup-2015">on
+          Github</a>. Tutorial text and code samples
+          are <a href="https://creativecommons.org/licenses/by-sa/4.0/">Creative
+          Commons-Attribution-Share Alike 4.0</a>. The Quil examples taken from
+          the Quil site are &copy; their respective authors, and are EPL like
+          the Quil site.
+        </p>
 
       </div>
 

@@ -23,9 +23,14 @@ h1,h2,h4,p,em,i,span {
   max-width: 600px;
 }
 
+h2, h3, h4 {
+  margin-top: 3em;
+}
+
 
 pre {
   font-family: "Input Mono Comp";
+  margin-bottom: 0em;
 }
 
 .CodeMirror {
