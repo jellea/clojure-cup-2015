@@ -3,6 +3,7 @@
 body {
   font-family: "Source Serif Pro";
   padding-left: 10px;
+  -webkit-font-smoothing: antialiased;
 }
 
 .CodeMirror {
