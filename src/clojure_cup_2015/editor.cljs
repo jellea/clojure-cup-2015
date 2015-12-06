@@ -5,6 +5,14 @@
             [cljs.js :as cljs]
             [cljs.tools.reader]))
 
+(defn debounce
+  ([f] (debounce f 1000))
+  ([f timeout]
+   (let [id (atom nil)]
+     (fn [evt]
+       (js/clearTimeout @id)
+       (reset! id (js/setTimeout f timeout))))))
+
 (def opts {:matchBrackets true
            :lineNumbers false
            :autoCloseBrackets true
@@ -95,9 +103,9 @@
                                         ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
-        (.on editor "change" #(eval name-space
-                                    (.getValue editor)
-                                    on-evaluated))
+        (.on editor "change" (debounce #(eval name-space
+                                              (.getValue editor)
+                                              on-evaluated)))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
