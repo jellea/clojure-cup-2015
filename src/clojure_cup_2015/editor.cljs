@@ -68,28 +68,32 @@
   (when error
     (println "Error:" error)))
 
+(defn bam [& args]
+  (throw (ex-info "Cljs warning" {:args args}))
+  (prn "BAM BAM BAM"))
+
 (defn eval
   ([name-space in-str]
    (eval name-space in-str #()))
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
-     (prn name-space)
-     (cljs/eval-str st in-str (symbol name-space)
-                    {:eval cljs/js-eval
-                     :ns (symbol name-space)
-                     ;;:verbose true
+     (binding [cljs.analyzer/*cljs-warning-handlers* [bam]]
+       (cljs/eval-str st in-str (symbol name-space)
+                      {:eval cljs/js-eval
+                       :ns (symbol name-space)
+                       ;;:verbose true
 
-                     ;; don't ask me why this works. It stops Clojurescript from complaining that
-                     ;; *load-fn* isn't defined
-                     :load (fn [_ cb] (cb {:lang :clj :source ""}))}
-                    (fn [{:keys [error value]}]
-                      (if error
-                        (do
-                          (error! (->> error .-cause .-message))
-                          (swap! !state assoc :result nil))
-                        (do
-                          (dismiss!)
-                          (swap! !state assoc :result (str value)))))))))
+                       ;; don't ask me why this works. It stops Clojurescript from complaining that
+                       ;; *load-fn* isn't defined
+                       :load (fn [_ cb] (cb {:lang :clj :source ""}))}
+                      (fn [{:keys [error value]}]
+                        (if error
+                          (do
+                            (error! (->> error .-cause .-message))
+                            (swap! !state assoc :result nil))
+                          (do
+                            (dismiss!)
+                            (swap! !state assoc :result (str value))))))))))
 
 (defn cm-editor
   "CodeMirror reagent component"
