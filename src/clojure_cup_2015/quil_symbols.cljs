@@ -297,7 +297,7 @@
   []
   (str
    (str/join "\n" (map #(str "(def " % " quil.core/" % ")") functions))
-   "(def sketch clojure-cup-2015.quil-symbols/sketch-wrapper)"))
+   "(def sketch (.. js/clojure_cup_2015 -quil-symbols -sketch-wrapper))"))
 
 ;; (defn make-require-str []
 ;;   (str
