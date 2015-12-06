@@ -91,7 +91,6 @@
 
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
-     (prn name-space)
      (binding [cljs.analyzer/*cljs-warning-handlers* [warning-hook]]
        (cljs/eval-str st in-str (symbol name-space)
                       {:eval cljs/js-eval
