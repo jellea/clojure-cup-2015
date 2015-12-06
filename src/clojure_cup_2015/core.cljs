@@ -47,7 +47,7 @@
                         :z-index 400
                         :transform "translateY(-45px)"}}
     [:div.btn.bg-red.rounded.mr1 {:on-click (partial revert! id)} "revert code"]
-    [:div.btn.bg-green.rounded "restart sketch"]]])
+    #_[:div.btn.bg-green.rounded {:on-click (partial restart! id)} "restart sketch"]]])
 
 (defn monoline-editor
   [id default-code]

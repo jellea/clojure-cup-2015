@@ -138,12 +138,11 @@
                    (quil-symbols/import-symbols-src)
                    (.getValue editor))
               (partial find-error id))
-        
         (when (:monoline props)
           (js/oneLineCM editor)
           (.on editor "change" (debounce #(eval name-space
-                                              (.getValue editor)
-                                              (partial find-value editor)))))
+                                                (.getValue editor)
+                                                (partial find-value editor)))))
 
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
