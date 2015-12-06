@@ -120,6 +120,16 @@
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
+    ; :did-unmount
+    ; (fn [this]
+    ;  (let [sketches quil-symbols/live-sketches
+    ;        dom-node (reagent/dom-node this)
+    ;        editor (.fromTextArea js/CodeMirror dom-node opts)]
+    ;   (doseq [e ["change" "cursorActivity"]]
+    ;     (.off editor e))
+    ;   (.exit (get sketches (:id props)))
+    ;   (swap! sketches dissoc (:id props))))
+
     :should-component-update
     (fn [this]
       (let [editor  (:editor (reagent/state this))
