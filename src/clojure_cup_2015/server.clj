@@ -9,6 +9,7 @@
   (:gen-class))
 
 (defroutes routes
+  (GET "/" _ (slurp (io/file (io/resource "public/index.html"))))
   (resources "/"))
 
 (def http-handler

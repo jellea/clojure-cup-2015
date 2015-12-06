@@ -59,8 +59,7 @@
                            :verbose true}}]}
 
 
-  :profiles {:uberjar {:source-paths ["env/prod/clj"]
-                       :hooks [leiningen.cljsbuild]
+  :profiles {:uberjar {:hooks [leiningen.cljsbuild]
                        :env {:production true}
                        :omit-source true
                        :aot :all
