@@ -1,6 +1,9 @@
 (ns clojure-cup-2015.editor
-  (:require [reagent.core :as reagent :refer [atom]]
-            [clojure-cup-2015.common :refer [config !state]]))
+  (:require [reagent.core :as reagent]
+            [clojure-cup-2015.common :refer [config !state]]
+            [clojure-cup-2015.quil-symbols :as quil-symbols]
+            [cljs.js :as cljs]
+            [cljs.tools.reader]))
 
 (def opts {:matchBrackets true
            :lineNumbers false
@@ -13,8 +16,8 @@
   [cm canvas-id]
   (when canvas-id
     (let [canvas (.getElementById js/document canvas-id)
-          cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 15) "local")
-          height (max (- cmheight (.-height canvas)) 5)]
+          cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 1) "local")
+          height (min (max (- cmheight (.-height canvas)) 5))]
       (set! (.. canvas -style -transform) (str "translateY(" height "px)")))))
 
 (defn outer-sexp
@@ -43,28 +46,56 @@
     (set! (.-innerHTML dom-node) text)
     (.setBookmark (.-doc editor) #js {:line line :ch ch} #js {:widget dom-node})))
 
+(defn error-hud []
+  (let []))
+
+(defonce cljs-compiler-state (cljs/empty-state))
+
+(defn eval
+  ([name-space in-str]
+   (eval name-space in-str #()))
+  ([name-space in-str callback]
+   (let [st cljs-compiler-state]
+      (prn name-space)
+      (cljs/eval-str st in-str (symbol name-space)
+        {:eval cljs/js-eval
+          :ns (symbol name-space)
+          ;;:verbose true
+
+          ;; don't ask me why this works. It stops Clojurescript from complaining that
+          ;; *load-fn* isn't defined
+          :load (fn [_ cb] (cb {:lang :clj :source ""}))}
+        callback))))
+
 (defn cm-editor
   "CodeMirror reagent component"
   [props cm-opts]
   (reagent/create-class
    {:component-did-mount
     (fn [this]
-      (let [eval-code #((:on-change props) (.getValue %))
-            editor (.fromTextArea js/CodeMirror (reagent/dom-node this) (clj->js (merge opts cm-opts)))]
-        (eval-code editor)
-        (add-inline {:line 0 :ch 100 :text "hi"} editor)
+      (let [id (:id props)
+            name-space (str (:id props) ".user")
+            dom-node (reagent/dom-node this)
+            opts (clj->js (merge opts cm-opts))
+            editor (.fromTextArea js/CodeMirror dom-node opts)]
+        (eval name-space (str "(ns " name-space "
+                           (:require [quil.core :as q]
+                                     [quil.middleware :as m]))"
+                           (quil-symbols/import-symbols-src)))
+        (eval name-space (.getValue editor))
+        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
-        (.on editor "change" eval-code)
-        (.on editor "cursorActivity" #(move-canvas % (:canvas-id props)))
+        (.on editor "change" #(eval name-space (.getValue editor) js/console.log))
+        (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
     :should-component-update
     (fn [this]
       (let [editor  (:editor (reagent/state this))
-            val     (:code (:code @!state))
-            update? (not= val (.getValue editor))]
-        (when update? (.setValue editor val))
+            value   (:code (:code @!state))
+            update? (not= value (.getValue editor))]
+        (when update? (.setValue editor value))
         update?))
 
     :reagent-render
