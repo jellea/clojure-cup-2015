@@ -80,7 +80,8 @@ canvas {
 }
 
 .error:before {
-    content: "\2639 ";
+    content: "\2639";
+    padding-right: 5px;
     font-size: 16px;
 }
 

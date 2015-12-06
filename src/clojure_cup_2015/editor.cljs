@@ -1,9 +1,10 @@
 (ns clojure-cup-2015.editor
   (:require [reagent.core :as reagent]
             [clojure-cup-2015.common :refer [config !state]]
-            [clojure-cup-2015.quil-symbols :as quil-symbols]
+            [clojure-cup-2015.quil-symbols :as quil-symbols :refer [quildocs]]
             [cljs.js :as cljs]
-            [cljs.tools.reader]))
+            [cljs.tools.reader]
+            [dommy.core :as d]))
 
 (defn debounce
   ([f] (debounce f 1000))
@@ -64,11 +65,11 @@
 
 (defonce cljs-compiler-state (cljs/empty-state))
 
-(defn on-evaluated [{:keys [error]}]
-  (when error
-    (println "Error:" error)))
+(defn warning-hook [& args]
+  (throw (ex-info "Cljs warning" {:args args})))
 
-(defn find-error [{:keys [error value]} id]
+
+(defn find-error [id {:keys [error value]}]
   (if error
     (do
       (error! {:message (->> error .-cause .-message)
@@ -85,15 +86,32 @@
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
      (prn name-space)
-     (cljs/eval-str st in-str (symbol name-space)
-                    {:eval cljs/js-eval
-                     :ns (symbol name-space)
-                     ;;:verbose true
+     (binding [cljs.analyzer/*cljs-warning-handlers* [warning-hook]]
+       (cljs/eval-str st in-str (symbol name-space)
+                      {:eval cljs/js-eval
+                       :ns (symbol name-space)
+                       ;;:verbose true
 
-                     ;; don't ask me why this works. It stops Clojurescript from complaining that
-                     ;; *load-fn* isn't defined
-                     :load (fn [_ cb] (cb {:lang :clj :source ""}))}
-                    callback))))
+                       ;; don't ask me why this works. It stops Clojurescript from complaining that
+                       ;; *load-fn* isn't defined
+                       :load (fn [_ cb] (cb {:lang :clj :source ""}))}
+                      callback)))))
+
+(defn ns-str [ns]
+  (str "(ns " ns " (:require [quil.core :as q] [quil.middleware :as m]))"))
+
+(defn handle-mouse-over [ns editor event]
+  (let [left (.-pageX event)
+        top (.-pageY event)
+        line-char (.coordsChar editor #js {"left" left
+                                          "top" top })
+        char (.-ch line-char)
+        line (.-line line-char)]
+
+    (if-let [doc (get quildocs (.-string
+                                (.getTokenAt editor #js {"ch" char "line" line})))]
+      ;; ...
+      )))
 
 (defn cm-editor
   "CodeMirror reagent component"
@@ -106,17 +124,20 @@
             dom-node (reagent/dom-node this)
             opts (clj->js (merge opts cm-opts))
             editor (.fromTextArea js/CodeMirror dom-node opts)]
-        (eval name-space (str "(ns " name-space "
-                           (:require [quil.core :as q]
-                                     [quil.middleware :as m]))"
-                              (quil-symbols/import-symbols-src)))
-        (eval name-space (.getValue editor) on-evaluated)
+        (eval name-space
+              (str (ns-str name-space)
+                   (quil-symbols/import-symbols-src)
+                   (.getValue editor))
+              (partial find-error id))
                                         ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
-                                              (fn [e] (find-error e id)))))
+                                              (partial find-error id))))
+
+        (d/listen! (.getWrapperElement editor) :mouseover #(handle-mouse-over name-space editor %))
+
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
