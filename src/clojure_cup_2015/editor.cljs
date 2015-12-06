@@ -28,18 +28,21 @@
   (if-not (-> cm (.getTokenAt (.getCursor cm))
               .-state
               .-indentStack)
-    (prn "not in from")
+   (prn "not in from")
 
-    (do
-      (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
-        (.moveH cm -1 "char"))
-      (let [start (.getCursor cm)]
-        (.moveH cm 1 "char")
-        (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
-          (.moveH cm 1 "char"))
-        (let [end (.getCursor cm)]
-          (.setSelection cm start end)
-          (.getSelection cm))))))
+   (let [cur-cursor (.getCursor cm)]
+     (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
+       (.moveH cm -1 "char"))
+     (let [start (.getCursor cm)]
+       (.moveH cm 1 "char")
+       (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
+         (.moveH cm 1 "char"))
+       (let [end (.getCursor cm)]
+         (.setSelection cm start end)
+         (let [selection (.getSelection cm)]
+           (.setCursor cm cur-cursor)
+           selection))))))
+
 
 (defn add-inline
   "Add a inline comment/result/documentation what ever"
@@ -54,6 +57,9 @@
 (defn dismiss! [] (error! nil))
 
 (defonce cljs-compiler-state (cljs/empty-state))
+
+(defn on-evaluated [x]
+  (prn x))
 
 (defn eval
   ([name-space in-str]
@@ -78,7 +84,6 @@
                           (dismiss!)
                           (swap! !state assoc :result (str value)))))))))
 
-
 (defn cm-editor
   "CodeMirror reagent component"
   [props cm-opts]
@@ -94,11 +99,13 @@
                            (:require [quil.core :as q]
                                      [quil.middleware :as m]))"
                               (quil-symbols/import-symbols-src)))
-        (eval name-space (.getValue editor))
+        (eval name-space (.getValue editor) on-evaluated)
                                         ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
-        (.on editor "change" #(eval name-space (.getValue editor) js/console.log))
+        (.on editor "change" #(eval name-space
+                                    (outer-sexp editor)
+                                    on-evaluated))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 

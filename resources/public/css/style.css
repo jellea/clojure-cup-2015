@@ -18,6 +18,10 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+h1,h2,p,em,i,span {
+  max-width: 40em;
+}
+
 .CodeMirror {
   font-family: "Input Mono Comp";
   font-style: normal;
@@ -34,24 +38,6 @@ body {
 
 .CodeMirror:not(.mono-line){
   min-height: 320px;
-}
-
-#bang textarea {
-    margin-top: 10px;
-}
-#bang input {
-    display: block;
-    margin-top: 10px;
-}
-
-.editor {
-    display: none;
-}
-
-.cm {
-    padding: 5px;
-    color: white;
-    background-color: #A00000;
 }
 
 canvas {
