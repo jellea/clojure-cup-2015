@@ -3,7 +3,7 @@
   (:require [reagent.core :as reagent]
             [dommy.core :as d
              :refer-macros [sel sel1]]
-            [clojure-cup-2015.editor :refer [cm-editor]]
+            [clojure-cup-2015.editor :refer [cm-editor mirrors]]
             [clojure-cup-2015.common :refer [config !state !tooltip]]
             [cljsjs.codemirror]
             [cljsjs.codemirror]
@@ -15,7 +15,7 @@
             [quil.core]
             [quil.middleware]))
 
-(def snippets (read-snippets 5))
+(def !snippets (atom {}))
 
 (enable-console-print!)
 
@@ -30,9 +30,9 @@
        [:p.error (:message error)])]))
 
 (defn revert! [id _]
-  (prn id)
-
-  )
+  (when-let [mirror (get @mirrors id)]
+    (when-let [snippet (get @!snippets id)]
+      (.setValue mirror snippet))))
 
 (defn canvas-editor
   "Code mirror + a canvas, so quil can render to it"
@@ -73,7 +73,8 @@
     (d/remove-class! e "editor") ;; only replace once (d/add-class! editor "cm")
     ;; (d/add-class! new "cm")
     (d/insert-before! new e)
-    (reagent/render-component [canvas-editor cmid text] new)))
+    (reagent/render-component [canvas-editor cmid text] new)
+    (swap! !snippets assoc cmid text)))
 
 (defn mirrorize! []
   (doseq [e (sel ".editor")]

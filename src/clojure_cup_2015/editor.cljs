@@ -113,6 +113,8 @@
                                 (.getTokenAt editor #js {"ch" char "line" line})))]
       (reset! !tooltip {:left left :top top :doc doc}))))
 
+(def mirrors (atom {}))
+
 (defn cm-editor
   "CodeMirror reagent component"
   [props cm-opts]
@@ -124,6 +126,7 @@
             dom-node (reagent/dom-node this)
             opts (clj->js (merge opts cm-opts))
             editor (.fromTextArea js/CodeMirror dom-node opts)]
+        (swap! mirrors assoc id editor)
         (eval name-space
               (str (ns-str name-space)
                    (quil-symbols/import-symbols-src)
