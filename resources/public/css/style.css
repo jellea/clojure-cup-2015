@@ -34,6 +34,8 @@ h1,h2,p,em,i,span {
   z-index: 1;
   border-radius: 5px;
   position: relative;
+
+  margin-bottom: 15px;
 }
 
 .CodeMirror:not(.mono-line){
