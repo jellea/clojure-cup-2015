@@ -286,7 +286,8 @@
 
 (defn sketch*
   "Start a new sketch and store it with the original options."
-  [opts]
+  [{:keys [host] :as opts}]
+  (println "Starting sketch " opts)
   (let [new-sketch (apply quil.core/sketch (apply concat opts))]
     (swap! live-sketches assoc host {:sketch new-sketch
                                      :opts opts})))
@@ -296,9 +297,10 @@
   alone, if a sketch with different options but same id (host) is running, stop
   the old one and start a new one."
   [& {:keys [host] :as opts}]
-  (if-let [sketch (get @live-sketches host)]
-    (when-not (= (:opts sketch) sketch)
-      (.exit (:sketch sketch))
+  (if-let [old-sketch (get @live-sketches host)]
+    (when-not (= (:opts old-sketch) opts)
+      (println "Stopping sketch " (:opts old-sketch))
+      (.exit (:sketch old-sketch))
       (sketch* opts))
     (sketch* opts)))
 
