@@ -64,15 +64,11 @@
 
 (defonce cljs-compiler-state (cljs/empty-state))
 
-(defn on-evaluated [{:keys [error]}]
-  (when error
-    (println "Error:" error)))
-
 (defn warning-hook [& args]
   (throw (ex-info "Cljs warning" {:args args})))
 
 
-(defn find-error [{:keys [error value]} id]
+(defn find-error [id {:keys [error value]}]
   (if error
     (do
       (error! {:message (->> error .-cause .-message)
@@ -99,6 +95,9 @@
                        ;; *load-fn* isn't defined
                        :load (fn [_ cb] (cb {:lang :clj :source ""}))}
                       callback)))))
+
+(defn ns-str [ns]
+  (str "(ns " ns " (:require [quil.core :as q] [quil.middleware :as m]))"))
 
 (defn cm-editor
   "CodeMirror reagent component"
