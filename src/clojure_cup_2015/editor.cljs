@@ -26,20 +26,20 @@
   (if-not (-> cm (.getTokenAt (.getCursor cm))
               .-state
               .-indentStack)
-   (prn "not in from")
+    (prn "not in from")
 
-   (let [cur-cursor (.getCursor cm)]
-     (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
-       (.moveH cm -1 "char"))
-     (let [start (.getCursor cm)]
-       (.moveH cm 1 "char")
-       (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
-         (.moveH cm 1 "char"))
-       (let [end (.getCursor cm)]
-         (.setSelection cm start end)
-         (let [selection (.getSelection cm)]
-           (.setCursor cm cur-cursor)
-           selection))))))
+    (let [cur-cursor (.getCursor cm)]
+      (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
+        (.moveH cm -1 "char"))
+      (let [start (.getCursor cm)]
+        (.moveH cm 1 "char")
+        (while (-> cm (.getTokenAt (.getCursor cm)) .-state .-indentStack)
+          (.moveH cm 1 "char"))
+        (let [end (.getCursor cm)]
+          (.setSelection cm start end)
+          (let [selection (.getSelection cm)]
+            (.setCursor cm cur-cursor)
+            selection))))))
 
 
 (defn add-inline
@@ -54,8 +54,9 @@
 
 (defonce cljs-compiler-state (cljs/empty-state))
 
-(defn on-evaluated [x]
-  (prn x))
+(defn on-evaluated [{:keys [error]}]
+  (when error
+    (println "Error:" error)))
 
 (defn eval
   ([name-space in-str]
@@ -95,7 +96,7 @@
         (when (:monoline props)
           (js/oneLineCM editor))
         (.on editor "change" #(eval name-space
-                                    (outer-sexp editor)
+                                    (.getValue editor)
                                     on-evaluated))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
