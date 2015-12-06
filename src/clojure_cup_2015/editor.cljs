@@ -1,9 +1,10 @@
 (ns clojure-cup-2015.editor
   (:require [reagent.core :as reagent]
             [clojure-cup-2015.common :refer [config !state]]
-            [clojure-cup-2015.quil-symbols :as quil-symbols]
+            [clojure-cup-2015.quil-symbols :as quil-symbols :refer [quildocs]]
             [cljs.js :as cljs]
-            [cljs.tools.reader]))
+            [cljs.tools.reader]
+            [dommy.core :as d]))
 
 (defn debounce
   ([f] (debounce f 1000))
@@ -99,6 +100,19 @@
 (defn ns-str [ns]
   (str "(ns " ns " (:require [quil.core :as q] [quil.middleware :as m]))"))
 
+(defn handle-mouse-over [ns editor event]
+  (let [left (.-pageX event)
+        top (.-pageY event)
+        line-char (.coordsChar editor #js {"left" left
+                                          "top" top })
+        char (.-ch line-char)
+        line (.-line line-char)]
+
+    (if-let [doc (get quildocs (.-string
+                                (.getTokenAt editor #js {"ch" char "line" line})))]
+      ;; ...
+      )))
+
 (defn cm-editor
   "CodeMirror reagent component"
   [props cm-opts]
@@ -121,6 +135,9 @@
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
                                               (partial find-error id))))
+
+        (d/listen! (.getWrapperElement editor) :mouseover #(handle-mouse-over name-space editor %))
+
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
