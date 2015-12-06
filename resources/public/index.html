@@ -18,13 +18,30 @@
     <div id="content">
 
       <div>
-        <em>Goodday, traveler. Today you embark upon a journey into Quil. May your eyes be bright, for there are sights to behold.</em>
-        <p>Quil lets you do visual programming. You can make drawings and animations, even interactive ones with keyboard and mouse.</p>
-        <p>A Quil program is called a sketch. We set up a "draw function" that creates the actual visuals.</p>
+        <p><em>
+          Goodday, traveler. Today you embark upon a journey into Quil. May your
+          eyes be bright, for there are sights to behold.
+        </em></p>
+        <p>
+          This is a tutorial for Quil, a visual programming system that combines
+          the powers of ClojureScript and Processing.js.
+        </p>
+        <p>
+          Quil lets you do visual programming. You can make drawings and
+          animations, even interactive ones with keyboard and mouse.
+        </p>
+        <p>
+          A Quil program is called a sketch. You set up a <em>draw function</em> to
+          draw the actual visuals.
+        </p>
+        <p>
+          The road to Quil first goes through the Pine Forest. Try changing some
+          numbers and see what happens!
+        </p>
 
-        <script type="cljs" class="editor" data-cmid="pink-triangles">
+        <script type="cljs" class="editor" data-cmid="pine-forest">
 ;; This is the draw function which Quil will run
-(defn draw-pink-triangles []
+(defn draw-pine-forest []
   ;; First we set the stage: a background color, and no borders around shapes
   (background 20 200 151)
   (no-stroke)
@@ -33,27 +50,32 @@
   ;; red - green - blue, and go up to 255
   (fill 34 95 215)
 
-  ;; Fill the width and height of the canvas with triangles
+  ;; Fill the width and height of the canvas with pine-forest
   (doseq [x (range 0 (width) 50)
-          y (range 0 (height) 50)]
+          y (range 0 (height) 60)]
     (triangle (+ x 25) y
               x (+ y 50)
-              (+ x 50) (+ y 50))))
+              (+ x 50) (+ y 50))
+    (rect (+ x 16) (+ y 50) 16 10)))
 
 (sketch
-  :host "pink-triangles"
+  :host "pine-forest"
   :size [300 300]
-  :draw draw-pink-triangles
+  :draw draw-pine-forest
   :setup #(frame-rate 1))
         </script>
 
-        <p>etc etc</p>
-
-      <p>
-That's already a lovely pattern we got going. Knit it into a turtleneck and aunt Juliet will envy you forever. But there's more, how about we get things moving a bit?
+        <p>
+          That's already a lovely pattern we got going. Knit it into a
+          turtleneck and aunt Juliet will envy you forever. But there's more,
+          how about we get things moving a bit?
+        </p>
+        <p>
+          This is the simplest version of an animation. It uses the current
+          `frame-count` to determine the position of the circle.
         </p>
 
-      <script type="cljs" class="editor" data-cmid="carrousel">
+        <script type="cljs" class="editor" data-cmid="carrousel">
 (defn draw-carrousel []
   (background 255)
   (no-stroke)
@@ -72,11 +94,11 @@ That's already a lovely pattern we got going. Knit it into a turtleneck and aunt
   :draw draw-carrousel)
         </script>
 
-      <p>
-        Lorem ipsum
+        <p>
+          Lorem ipsum
         </p>
 
-      <script type="cljs" class="editor" data-cmid="tailspin">
+        <script type="cljs" class="editor" data-cmid="tailspin">
 (defn setup []
   (frame-rate 30)
   (let [max-r (/ (width) 2)
@@ -125,7 +147,7 @@ That's already a lovely pattern we got going. Knit it into a turtleneck and aunt
   :draw draw-state
   :middleware [quil.middleware/fun-mode])
 
-    </script>
+        </script>
 
       </div>
 
