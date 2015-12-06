@@ -112,6 +112,11 @@
              [198 221 245]
              [202 216 247]])
 
+(defn- move-dots-down [state]
+  (->> state
+    (map #(update-in % [:pos 1] inc))
+    (filter #(< (get-in % [:pos 1]) (height)))))
+
 (defn paint-blotch-update
   "For each update cycle, register the new mouse position,
   then move all dots down"
@@ -121,11 +126,6 @@
       (if (and (> x 0) (> y 0) (< x (width)) (< y (height)))
         (conj state {:pos [x y] :color (rand-nth colors)})
         state))))
-
-(defn- move-dots-down [state]
-  (->> state
-    (map #(update-in % [:pos 1] inc))
-    (filter #(< (get-in % [:pos 1]) (height)))))
 
 (defn paint-blotch-draw [state]
   (stroke-weight 25)
