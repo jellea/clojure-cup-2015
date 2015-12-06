@@ -4,7 +4,7 @@
             [dommy.core :as d
              :refer-macros [sel sel1]]
             [clojure-cup-2015.editor :refer [cm-editor]]
-            [clojure-cup-2015.common :refer [config !state]]
+            [clojure-cup-2015.common :refer [config !state !tooltip]]
             [cljsjs.codemirror]
             [cljsjs.codemirror]
             [cljsjs.codemirror.mode.clojure]
@@ -51,6 +51,13 @@
                     :id id}
          {:scrollbarStyle "null"}]])
 
+(defn tooltip [tt]
+  (if tt
+    (let [{left :left top :top doc :doc} tt]
+      [:div.tooltip {:style {:position "absolute" :left left :top top}}
+       doc])
+    [:div]))
+
 (defn on-js-reload [])
 
 (defn mirrorize-one! [e]
@@ -68,6 +75,8 @@
     (mirrorize-one! e)))
 
 (defn init []
-  (mirrorize!))
+  (mirrorize!)
+  ;;(reagent/render-component [tooltip !tooltip] (d/sel1 :body))
+  )
 
 (init)

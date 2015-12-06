@@ -1,6 +1,6 @@
 (ns clojure-cup-2015.editor
   (:require [reagent.core :as reagent]
-            [clojure-cup-2015.common :refer [config !state]]
+            [clojure-cup-2015.common :refer [config !state !tooltip]]
             [clojure-cup-2015.quil-symbols :as quil-symbols :refer [quildocs]]
             [cljs.js :as cljs]
             [cljs.tools.reader]
@@ -100,6 +100,7 @@
 (defn ns-str [ns]
   (str "(ns " ns " (:require [quil.core :as q] [quil.middleware :as m]))"))
 
+
 (defn handle-mouse-over [ns editor event]
   (let [left (.-pageX event)
         top (.-pageY event)
@@ -110,8 +111,7 @@
 
     (if-let [doc (get quildocs (.-string
                                 (.getTokenAt editor #js {"ch" char "line" line})))]
-      ;; ...
-      )))
+      (reset! !tooltip {:left left :top top :doc doc}))))
 
 (defn cm-editor
   "CodeMirror reagent component"
