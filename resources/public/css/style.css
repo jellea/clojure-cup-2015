@@ -36,24 +36,6 @@ body {
   min-height: 320px;
 }
 
-#bang textarea {
-    margin-top: 10px;
-}
-#bang input {
-    display: block;
-    margin-top: 10px;
-}
-
-.editor {
-    display: none;
-}
-
-.cm {
-    padding: 5px;
-    color: white;
-    background-color: #A00000;
-}
-
 canvas {
     transform-origin: top;
     transition: transform 200ms ease-out;
