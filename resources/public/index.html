@@ -97,7 +97,7 @@
         <h3>The Carousel</h3>
         <p>
           Time to make your head spin! This is an example of an animation. It
-          uses the current `frame-count` to determine the position of the
+          uses the current <tt>frame-count</tt> to determine the position of the
           circle.
         </p>
         <script type="cljs" class="editor" data-cmid="carousel">
@@ -180,16 +180,16 @@
         <h2>Creating a sketch</h2>
 
         <p>
-          To get Quil to draw something, the minimum you need is
-          a <tt>:draw</tt> function. You then pass this on to Quil when you
+          The minimum you need to get Quil draw something on the screen is
+          a <tt>:draw</tt> function. You pass this function on to Quil when you
           call <tt>(sketch ,,,)</tt>. Quil can take other functions as well,
           like a <tt>:setup</tt> function, which is called once when your sketch
           starts to run.
         </p>
         <p>
-          The <tt>:host</tt> is the HTML "id" of the canvas
-          element where Quil will draw your sketch. We already set up a canvas
-          for you, so no need to worry about that.
+          The <tt>:host</tt> is the HTML <tt>id</tt> of the canvas element,
+          which is where Quil will draw your sketch. In this tutorial, we have
+          already set up a canvas for you, so no need to worry about that.
         </p>
 
         <h2>The Quil API</h2>
