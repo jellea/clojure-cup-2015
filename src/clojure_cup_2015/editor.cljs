@@ -79,6 +79,11 @@
       (dismiss!)
       (swap! !state assoc :result (str value)))))
 
+(defn find-value [editor {:keys [value]}]
+  ;;(js/console.log value)
+  (if value
+    (add-inline {:line 0 :ch 100 :text value} editor)))
+
 (defn eval
   ([name-space in-str]
    (eval name-space in-str #()))
@@ -107,11 +112,12 @@
         line-char (.coordsChar editor #js {"left" left
                                            "top" top })
         char (.-ch line-char)
-        line (.-line line-char)]
+        line (.-line line-char)
+        token (.-string (.getTokenAt editor #js {"ch" char "line" line}))]
 
-    (if-let [doc (get quildocs (.-string
-                                (.getTokenAt editor #js {"ch" char "line" line})))]
-      (reset! !tooltip {:left left :top top :doc doc}))))
+    (if-let [doc (get quildocs token)]
+      (reset! !tooltip {:left left :top top :doc doc :name token})
+      (reset! !tooltip nil))))
 
 (def mirrors (atom {}))
 
@@ -132,9 +138,13 @@
                    (quil-symbols/import-symbols-src)
                    (.getValue editor))
               (partial find-error id))
-                                        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
+        
         (when (:monoline props)
-          (js/oneLineCM editor))
+          (js/oneLineCM editor)
+          (.on editor "change" (debounce #(eval name-space
+                                              (.getValue editor)
+                                              (partial find-value editor)))))
+
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
                                               (partial find-error id))))

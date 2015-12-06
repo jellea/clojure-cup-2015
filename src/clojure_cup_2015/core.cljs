@@ -57,23 +57,32 @@
          {:scrollbarStyle "null"}]])
 
 (defn tooltip [tt]
-  (if tt
-    (let [{left :left top :top doc :doc} tt]
-      [:div.tooltip {:style {:position "absolute" :left left :top top}}
-       doc])
+  (if @tt
+    (let [{left :left top :top doc :doc name :name} @tt]
+      [:div.tooltip {:style {:position "absolute"
+                             :left left :top top
+                             :z-index 2000000
+                             :backgroundColor "#d0faf4"
+                             :border "2px solid #c6ddf5"
+                             :maxWidth  "40em"
+                             :maxHeight "10000px"
+                             :padding "1em"}}
+       [:div {:style {:textDecoration "underline"
+                      :fontWeight "bold"}} name]
+       [:div doc]])
     [:div]))
 
 (defn on-js-reload [])
 
 (defn mirrorize-one! [e]
-  (let [cmtype (d/attr e "data-cmtype")
+  (let [monoline (d/attr e "data-monoline")
         cmid (d/attr e "data-cmid")
         text (->> e .-text clojure.string/trim)
         new (d/create-element :div)]
     (d/remove-class! e "editor") ;; only replace once (d/add-class! editor "cm")
     ;; (d/add-class! new "cm")
     (d/insert-before! new e)
-    (reagent/render-component [canvas-editor cmid text] new)
+    (reagent/render-component [(if monoline monoline-editor canvas-editor) cmid text] new)
     (swap! !snippets assoc cmid text)))
 
 (defn mirrorize! []
@@ -82,7 +91,6 @@
 
 (defn init []
   (mirrorize!)
-  ;;(reagent/render-component [tooltip !tooltip] (d/sel1 :body))
-  )
+  (reagent/render-component [tooltip !tooltip] (d/sel1 :#tooltip)))
 
 (init)

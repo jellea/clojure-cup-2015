@@ -39,7 +39,7 @@ h1,h2,p,em,i,span {
   margin-bottom: 15px;
 }
 
-.CodeMirror:not(.mono-line){
+.CodeMirror:not(.monoline){
   min-height: 320px;
 }
 
