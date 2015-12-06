@@ -96,9 +96,14 @@
 
         <h3>The Carousel</h3>
         <p>
-          Time to make your head spin! This is an example of an animation. It
-          uses the current <tt>frame-count</tt> to determine the position of the
-          circle.
+          Time to make your head spin! This is an example of an animation. Think
+          of it like an old fashioned film projector, spinning through a
+          sequence of images. Quil calls your draw function many times in rapid
+          succession to draw the individual images, called <em>frames<em>.
+        </p>
+        <p>
+          Quil keeps a count of how many frames have passed. This sketch uses
+          that <tt>frame-count</tt> to determine the position of the circle.
         </p>
         <script type="cljs" class="editor" data-cmid="carousel">
 (defn draw-carousel []
@@ -213,6 +218,8 @@
         </p>
 
         <h2>Animation and State</h2>
+
+
 
         <h2>Advanced Examples</h2>
 
