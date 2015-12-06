@@ -102,66 +102,97 @@
           mouse.
         </p>
 
-        <script type="cljs" class="editor" data-cmid="mouse-draw">
-(def colors [[244 213 221]
-             [249 202 216]
+        <script type="cljs" class="editor" data-cmid="paint-blotch">
+(def colors [[249 202 216]
              [232 181 188]
              [240 155 150]
              [209 188 219]
              [204 199 241]
-             [177 196 227]
-             [194 208 233]
              [198 221 245]
              [202 216 247]])
 
-(defn register-mouse-position [state]
-  (let [x (mouse-x)
-        y (mouse-y)]
-    (if (and (> x 0) (> y 0) (< x (width)) (< y (height)))
-      (conj state {:pos [x y] :color (rand-nth colors)})
-      state)))
+(defn paint-blotch-update
+  "For each update cycle, register the new mouse position,
+  then move all dots down"
+  [state]
+  (move-dots-down
+    (let [x (mouse-x) y (mouse-y)]
+      (if (and (> x 0) (> y 0) (< x (width)) (< y (height)))
+        (conj state {:pos [x y] :color (rand-nth colors)})
+        state))))
 
-(defn move-dots-down [state]
+(defn- move-dots-down [state]
   (->> state
     (map #(update-in % [:pos 1] inc))
-    (filter (fn [{[_ y] :pos}] (> y (height))))))
+    (filter #(< (get-in % [:pos 1]) (height)))))
 
-(defn draw-points [state]
-  (stroke-weight 8)
+(defn paint-blotch-draw [state]
+  (stroke-weight 25)
   (doseq [{[x1 y1] :pos color :color} state]
-  (apply stroke color)
+    (apply stroke color)
     (point x1 y1)))
 
-(defn setup []
-  (background 244 213 221)
-  ;; The initial state is just empty list
+(defn paint-blotch-setup []
+  (background 255)
+  ;; The initial state is just an empty list
   (list))
 
 (sketch
-  :host "mouse-draw"
+  :host "paint-blotch"
   :size [300 300]
-  :setup #'setup
-
-  ;; For each update cycle, register the new mouse position,
-  ;; then move all dots down
-  :update #'register-mouse-position
-  :draw #'draw-points
+  :setup #'paint-blotch-setup
+  :update #'paint-blotch-update
+  :draw #'paint-blotch-draw
   :middleware [quil.middleware/fun-mode])
-        </script>
+                </script>
 
         <h2>Creating a sketch</h2>
 
         <p>
-          To get Quil do draw something, the minimum you need is a draw
-          function. You then pass this on to Quil when you call "sketch". Quil
-          can take other functions as well, like a setup function, which is
-          called once when your sketch starts to run.
+          To get Quil do draw something, the minimum you need is
+          a <tt>:draw</tt> function. You then pass this on to Quil when you
+          call <tt>(sketch ,,,)</tt>. Quil can take other functions as well,
+          like a <tt>:setup</tt> function, which is called once when your sketch
+          starts to run.
         </p>
-
         <p>
-          The <pre>:host</pre> is the HTML "id" of the canvas
+          The <tt>:host</tt> is the HTML "id" of the canvas
           element where Quil will draw your sketch. We already set up a canvas
           for you, so no need to worry about that.
+        </p>
+
+        <h2>The Quil API</h2>
+
+        <p>
+          Inside the <tt>:draw</tt> you have access to a long list of functions
+          provided by Quil. You already used many of them.
+        </p>
+        <p>
+          Drawing primitives:
+        </p>
+        <ul>
+          <li><tt>(triangle x1 y1, x2 y2, x3 y3)</tt></li>
+          <li><tt>(rect x1 y1, x2 y2)</tt></li>
+          <li><tt>(ellipse x1 y1, width, height)</tt></li>
+          <li><tt>(point x1 y1)</tt></li>
+          <li><tt>(background red green blue)</tt></li>
+        </ul>
+        <p>
+          Functions that change the drawing context:
+        </p>
+        <ul>
+          <li><tt>(fill red green blue)</tt></li>
+          <li><tt>(stroke red green blue)</tt></li>
+          <li><tt>(stroke-weight weight)</tt></li>
+          <li><tt>(no-stroke)</tt></li>
+        </ul>
+
+        <p>
+          When you draw a shape, it stays there until you draw something on top
+          of it. You can see this well in the last example.
+          <tt>(background ,,,)</tt> will refill the whole canvas with a solid
+          color, so you can use it in your draw function to clear the canvas
+          before drawing the new frame.
         </p>
 
         <h2>Advanced Examples</h2>
