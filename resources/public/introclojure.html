@@ -18,6 +18,9 @@
       <p>
         Notice the parentheses. Parentheses enclose instructions to the computer in Clojure. A left parenthesis is the start of the instruction, and a matching right parenthesis is the end of enclosing instruction. Normally, Clojure code has a lot of nested parentheses, on other words, nested enclosing instructions.
       </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (print-str "Hello, World!")
+      </script>
       <p>
         Next to the parentheses, we see the instructions to the computer. That instruction is normally what we call a function. The functions do all the hard work in Clojure. print-str, + and forward are all functions. When these functions get run, they return a some type of value. Clojure functions always return a value.
       </p>
@@ -32,7 +35,7 @@
           "Hello, World!"
         </pre>
         <pre>
-          "Aubrey said, \"I think we shopred go to the Orange Jpreius.\""
+          "Aubrey said, \"I think we should go to the Orange Julius.\""
         </pre>
       </p>
       <h4>
@@ -92,7 +95,7 @@
       </h3>
       <p>
         In Clojure, +, -, * and / appear before two numbers. This is called prefx
-        notation. What you’re used to seeing is called infx notation, as the arithmetic 
+        notation. What you’re used to seeing is called infx notation, as the arithmetic
         operator is in-between the two operands.
       </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
@@ -105,10 +108,12 @@
         Imagine both are unclear, but notice that in the prefix version, you do not have to ever think about the precedence of operators. Because each expression has the operator before all the operands and the entire expression is wrapped in parentheses, all precendence is explicit.
       </p>
       <p>
-        Infix: 1 + 2 / 3
-        See how this is written in Clojure in the editor below.
-        This example uses integers but try changing the numbers to floats, decimals, or fractions and see wha
+        This example uses integers but try changing the numbers to floats, decimals, or fractions and see what happens.
       </p>
+      <p>
+        See how this infix example is written in Clojure in the editor below. <br></br>
+        Infix: 1 + 2 / 3
+        </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
         (+ 1 (/ 2 3))
       </script>
@@ -119,46 +124,59 @@
         Another reason prefix notation can be nice is that it can make long expressions less repetitive. With prefix notation, if we plan to use the same operator on many operands, we do not have to repeat the operator between them.
       </p>
       <p>
+        See how this infix example is written in Clojure in the editor below <br></br>
         Infix: 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9
-        See how this is written in Clojure in the editor below
       </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
         (+ 1 2 3 4 5 6 7 8 9)
       </script>
       <h3>
+        Data Structures
+      </h3>
+      <p>
+        So far, we’ve dealt with discrete pieces of data: one number, one string, one value. When programming, it is more often the case that you want to work with groups of data.
+      </p>
+      <h4>
+        Vectors
+      </h4>
+      <p>
+        A vector is a sequential collection of values. A vector may be empty. A vector may contain values of different types. Each value in a vector is numbered starting at 0, that number is called its index. The index is used to refer to each value when looking them up.
+        <br>
+        </br>
+        Vectors are written using square brackets with any number of pieces of data inside them, separated by spaces. Here are some examples of vectors:
+      </p>
+      <p>
+        In this example, we use the conj function to add a number to an existing vector.
+        </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (conj [1 2 3 50 100] 10) 
+      </script>
+      <h4>
+        Vectors
+      </h4>
+      <p>
+      </p>
+      <h3>
         Some basic Clojure functions
       </h3>
       <p>
-        <strong>Type</strong> try evaluating type on a few different values that we covered. 
-      </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (type :hello)
-      </script>
-      <p>
-        <strong>str</strong> this combines two strings, but try changing one of them to a number. 
+        <strong>str</strong> this example combines two strings, but try changing one of them to a number.
       </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
         (str "hey " "there")
       </script>
       <p>
-        <strong>inc</strong> this combines two strings, but try changing one of them to a number. 
+        <strong>inc</strong>
       </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
         (inc 5)
-      </script>
-      <p>
-        <strong>=</strong> returns a boolean after evaluating whether the arguments are equivalent. Works on all data types not just numbers. Try changing the arguments and nesting other functions.
-      </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (= 3 5)
       </script>
        <p>
         <strong>concat</strong>
       </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (concat "Bobby" "Stacy" "Phillip")
+        (concat ["Bobby" "Stacy"] ["Phillip"])
       </script>
-      
     </div>
     <script src="js/oneline.js" type="text/javascript"></script>
     <script src="js/compiled/clojure_cup_2015.js" type="text/javascript"></script>
