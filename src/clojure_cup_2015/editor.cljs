@@ -50,12 +50,13 @@
             (.setCursor cm cur-cursor)
             selection))))))
 
-
 (defn add-inline
   "Add a inline comment/result/documentation what ever"
   [{:keys [line ch text]} editor]
   (let [dom-node (.createElement js/document "span")]
-    (set! (.-innerHTML dom-node) text)
+    (set! (.-innerHTML dom-node) (str " => " text))
+    (when-let [b (-> editor .-doc .getAllMarks first)]
+      (.clear b))
     (.setBookmark (.-doc editor) #js {:line line :ch ch} #js {:widget dom-node})))
 
 (defn error! [error]
