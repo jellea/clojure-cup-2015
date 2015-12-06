@@ -110,17 +110,17 @@
             dom-node (reagent/dom-node this)
             opts (clj->js (merge opts cm-opts))
             editor (.fromTextArea js/CodeMirror dom-node opts)]
-        (eval name-space (str "(ns " name-space "
-                           (:require [quil.core :as q]
-                                     [quil.middleware :as m]))"
-                              (quil-symbols/import-symbols-src)))
-        (eval name-space (.getValue editor) on-evaluated)
+        (eval name-space
+              (str (ns-str name-space)
+                   (quil-symbols/import-symbols-src)
+                   (.getValue editor))
+              (partial find-error id))
                                         ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
-                                              (fn [e] (find-error e id)))))
+                                              (partial find-error id))))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
