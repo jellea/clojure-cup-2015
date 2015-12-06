@@ -5,7 +5,6 @@
    [:h1 "Into the Land of Quil"]
    [:h2 "A Great and Valiant Journey of Derring-do"]])
 
-
 (def chapter-1
   [:div
    [:em "Goodday, traveler. Today you embark upon a journey into Quil. May your eyes be bright, for there are sights to behold."]
@@ -39,7 +38,7 @@
 
    [:p "That's already a lovely pattern we got going. Knit it into a turtleneck and aunt Juliet will envy you forever. But there's more, how about we get things moving a bit?"]
 
-   [:quil-code "carrousel" "(defn draw-carrousel []
+   [:quil-code "carousel" "(defn draw-carousel []
   (background 255)
   (no-stroke)
   (fill 252 90 44)
@@ -52,9 +51,9 @@
       (ellipse x y, width height)))
 
 (sketch
-  :host \"carrousel\"
+  :host \"carousel\"
   :size [300 300]
-  :draw draw-carrousel)"]
+  :draw draw-carousel)"]
 
    [:p]
 
