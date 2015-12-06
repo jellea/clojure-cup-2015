@@ -7,14 +7,22 @@
   :dependencies [[org.clojure/clojure "1.7.0"]
                  [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/core.async "0.2.374"]
+
                  [quil "2.3.0"]
                  [cljsjs/codemirror "5.8.0-0"]
-                 [reagent "0.5.0"]]
+                 [reagent "0.5.0"]
+
+                 [ring "1.4.0"]
+                 [ring/ring-defaults "0.1.5"]
+                 [compojure "1.4.0"]
+                 [environ "1.0.1"]]
 
   :plugins [[lein-cljsbuild "1.1.1"]
             [lein-figwheel "0.5.0-1"]]
 
   :source-paths ["src"]
+
+  :main clojure-cup-2015.server
 
   :clean-targets ^{:protect false} ["resources/public/js/compiled" "target"]
 
@@ -35,6 +43,7 @@
                            :static-fns true
                            :optimize-constants true
                            :verbose true}}
+
                ;; This next build is an compressed minified build for
                ;; production. You can build this with:
                ;; lein cljsbuild once min
@@ -48,6 +57,25 @@
                            :static-fns true
                            :optimize-constants true
                            :verbose true}}]}
+
+
+  :profiles {:uberjar {:source-paths ["env/prod/clj"]
+                       :hooks [leiningen.cljsbuild]
+                       :env {:production true}
+                       :omit-source true
+                       :aot :all
+                       :main clojure-cup-2015.server
+                       :cljsbuild {:builds
+                                   [{:id "app"
+                                     :source-paths ["src"]
+                                     :compiler {:output-to "resources/public/js/compiled/clojure_cup_2015.js"
+                                                :main clojure-cup-2015.core
+                                                :jar true
+                                                :optimizations :none
+                                                :pretty-print false
+                                                :static-fns true
+                                                :optimize-constants true
+                                                :verbose true}}]}}}
 
   :figwheel {;; :http-server-root "public" ;; default and assumes "resources"
              ;; :server-port 3449 ;; default
