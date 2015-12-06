@@ -16,10 +16,12 @@
     </header>
     <div id="content">
       <p>
-        Notice the parentheses. Parentheses enclose instructions to the computer in Clojure. A left parenthesis is the start of the instruction, and a matching right parenthesis is the end of enclosing instruction. Normally, Clojure code has a lot of nested parentheses, on other words, nested enclosing instructions.
+        Notice the parentheses. Parentheses enclose instructions to the computer
+        in Clojure. A left parenthesis is the start of the instruction, and a
+        matching right parenthesis is the end of the enclosing instruction. Clojure code has a lot of nested parentheses.
       </p>
       <script type="cljs" class="editor" data-cmid="exp1" data-monoline="true">
-        (println "Hello, World!")
+        (str "Hello," " World!")
       </script>
       <p>
         Next to the parentheses, we see the instructions to the computer. That instruction is normally what we call a function. The functions do all the hard work in Clojure. print-str, + and forward are all functions. When these functions get run, they return a some type of value. Clojure functions always return a value.
