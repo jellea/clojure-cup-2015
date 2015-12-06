@@ -214,10 +214,15 @@
         <p>
           When you draw a shape, it stays on the canvas until you draw
           something on top of it. You can see this well in the last example.
-          <tt>(background ,,,)</tt> will refill the whole canvas with a solid
+          <tt>(background r g b)</tt> will refill the whole canvas with a solid
           color, so you can use it in your draw function to clear the canvas
-          before drawing the new frame.
-        </p>
+          before drawing the new frame. Replace <t>r</t>, <t>g</t> and <t>b</t>
+          by integers between 0 and 255 that represents red, green and blue
+          components in
+          the <a href="https://en.wikipedia.org/wiki/RGB_color_space">RGB</a>
+          color space. Try and see how the colors change as you modify the three
+          nubmers!
+</p>
 
 <p>
   One of the easiest things you can draw is a rectangle. Quil's <tt>rect</tt>
@@ -225,7 +230,8 @@
   and <tt>height</tt>. The first two arguments represent the location of the top
   left corner of rectangle on the canvas. Remember that in Quil, as in computer
   graphics in general, the origin <tt>(0, 0)</tt> of the coordinate system represents
-  the top left corner of the drawing surface.
+  the top left corner of the drawing surface. In this example, we're drawing a
+  centered equilateral rectangle or square.
 </p>
 
 <script type="cljs" class="editor" data-cmid="rect">
@@ -244,15 +250,15 @@
 </script>
 
 <p>
-  Drawing a circle isn't any harder harder. While Quil does not come with a
-  specific function for drawing circles, it supplies a function for the general
-  case of drawing ovals (or ellipses) that works just as well. After all, a
+  Drawing a circle isn't any harder. While Quil does not come with a
+  special function for drawing circles, it supplies a function for the general
+  case of drawing ovals (or ellipses). That will work well — after all, a
   circle is just an ellipse with equal horizontal and vertical dimensions.
   The <tt>ellipse</tt> function takes the same arguments
   as <tt>rect</tt>: <tt>x</tt>, <tt>y</tt>, <tt>width</tt> and <tt>height</tt>.
   However, whereas in the case of <tt>rect</tt> the point <tt>(x,y)</tt>
   reprents the top-left corner of the figure, in <tt>ellipse</tt> it represents
-  its center. This decision of the API designers makes sense: an ellipse doesn't
+  its center. This decision of Quil's authors makes sense: an ellipse doesn't
   have corners.
 </p>
 
