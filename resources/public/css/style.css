@@ -16,6 +16,7 @@ body {
   font-family: "source_serif_proregular";
   padding-left: 10px;
   -webkit-font-smoothing: antialiased;
+  padding: 2em;
 }
 
 h1,h2,p,em,i,span {
@@ -34,6 +35,8 @@ h1,h2,p,em,i,span {
   z-index: 1;
   border-radius: 5px;
   position: relative;
+
+  margin-bottom: 15px;
 }
 
 .CodeMirror:not(.monoline){

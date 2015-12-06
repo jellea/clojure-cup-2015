@@ -4,7 +4,7 @@
             [dommy.core :as d
              :refer-macros [sel sel1]]
             [clojure-cup-2015.editor :refer [cm-editor]]
-            [clojure-cup-2015.common :refer [config !state]]
+            [clojure-cup-2015.common :refer [config !state !tooltip]]
             [cljsjs.codemirror]
             [cljsjs.codemirror]
             [cljsjs.codemirror.mode.clojure]
@@ -36,7 +36,13 @@
    [:div.right.holder {:id (str id "_holder")}
     [:canvas {:id id}]
     [error-display id]]
-   [cm-editor {:default-value default-code :id id} {}]])
+   [cm-editor {:default-value default-code :id id} {}]
+   [:div.right {:style {:margin-right "315px"
+                        :position "relative"
+                        :z-index 400
+                        :transform "translateY(-45px)"}}
+    [:div.btn.bg-red.rounded.mr1 "revert code"]
+    [:div.btn.bg-green.rounded "restart sketch"]]])
 
 (defn monoline-editor
   [id default-code]
@@ -44,6 +50,13 @@
                     :monoline true
                     :id id}
          {:scrollbarStyle "null"}]])
+
+(defn tooltip [tt]
+  (if tt
+    (let [{left :left top :top doc :doc} tt]
+      [:div.tooltip {:style {:position "absolute" :left left :top top}}
+       doc])
+    [:div]))
 
 (defn on-js-reload [])
 
@@ -65,7 +78,7 @@
 
 (defn init []
   (mirrorize!)
-  #_(reagent/render-component bang-bang
-                              (. js/document (getElementById "app"))))
+  ;;(reagent/render-component [tooltip !tooltip] (d/sel1 :body))
+  )
 
 (init)
