@@ -166,10 +166,10 @@
 
         <p>
           Inside the <tt>:draw</tt> you have access to a long list of functions
-          provided by Quil. You already used many of them.
+          provided by Quil. You already used many of them, they let you
         </p>
         <p>
-          Drawing primitives:
+          draw shapes :
         </p>
         <ul>
           <li><tt>(triangle x1 y1, x2 y2, x3 y3)</tt></li>
@@ -179,7 +179,7 @@
           <li><tt>(background red green blue)</tt></li>
         </ul>
         <p>
-          Functions that change the drawing context:
+          manipulate the drawing context:
         </p>
         <ul>
           <li><tt>(fill red green blue)</tt></li>
@@ -187,6 +187,36 @@
           <li><tt>(stroke-weight weight)</tt></li>
           <li><tt>(no-stroke)</tt></li>
         </ul>
+
+        <p>
+          inspect or change the state of Quil:
+        </p>
+        <ul>
+          <li><tt>(width)</tt></li>
+          <li><tt>(height)</tt></li>
+          <li><tt>(frame-count)</tt></li>
+          <li><tt>(frame-rate r)</tt></li>
+        </ul>
+
+        <p>
+          interact with mouse or keyboard
+        </p>
+
+        <ul>
+          <li><tt>(mouse-x)</tt></li>
+          <li><tt>(mouse-y)</tt></li>
+        </ul>
+
+        <p>
+          Keep the <a href="http://quil.info/api/">Quil API reference</a> close
+          to you at all times. Hang it above your bed, keep it under your
+          pillow. It's a magical toolbox providing endless opportunities for
+          your creations.
+        </p>
+
+        <h2>Drawing shapes</h2>
+
+
 
         <p>
           When you draw a shape, it stays there until you draw something on top
