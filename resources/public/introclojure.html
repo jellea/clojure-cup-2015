@@ -12,14 +12,14 @@
   <body class="container">
     <header>
       <h1>Intro to Clojure</h1>
-      <h2>A short intro to Clojure, many thanks to <a href="http://www.clojurebridge.org/">Clojure Bridge</a> for the most of the material.</h2>
+      <h2>A short intro to Clojure, many thanks to <a href="http://www.clojurebridge.org/">Clojure Bridge</a> for most of the material.</h2>
     </header>
     <div id="content">
       <p>
         Notice the parentheses. Parentheses enclose instructions to the computer in Clojure. A left parenthesis is the start of the instruction, and a matching right parenthesis is the end of enclosing instruction. Normally, Clojure code has a lot of nested parentheses, on other words, nested enclosing instructions.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (print-str "Hello, World!")
+      <script type="cljs" class="editor" data-cmid="exp1" data-monoline="true">
+        (println "Hello, World!")
       </script>
       <p>
         Next to the parentheses, we see the instructions to the computer. That instruction is normally what we call a function. The functions do all the hard work in Clojure. print-str, + and forward are all functions. When these functions get run, they return a some type of value. Clojure functions always return a value.
@@ -88,7 +88,7 @@
         notation. What you’re used to seeing is called infx notation, as the arithmetic
         operator is in-between the two operands.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp2" data-monoline="true">
         (* 100 100)
       </script>
       <h4>
@@ -104,7 +104,7 @@
         See how this infix example is written in Clojure in the editor below. <br></br>
         Infix: 1 + 2 / 3
         </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp3" data-monoline="true">
         (+ 1 (/ 2 3))
       </script>
       <h4>
@@ -117,7 +117,7 @@
         See how this infix example is written in Clojure in the editor below <br></br>
         Infix: 1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp4" data-monoline="true">
         (+ 1 2 3 4 5 6 7 8 9)
       </script>
       <h3>
@@ -126,13 +126,13 @@
       <p>
         <strong>str</strong> this example combines two strings, but try changing one of them to a number.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (str "hey " "there")
+      <script type="cljs" class="editor" data-cmid="exp5" data-monoline="true">
+        (str "Hey " "there")
       </script>
       <p>
         <strong>inc</strong>
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp6" data-monoline="true">
         (inc 5)
       </script>
       <h3>
@@ -153,10 +153,10 @@
       <p>
         The next two functions are used to make new vectors. The vector function takes any number of items and puts them in a new vector. conj is an interesting function that you’ll see used with all the data structures. With vectors, it takes a vector and an item and returns a new vector with that item added to the end of the vector. Why the name conj? conj is short for conjoin, which means to join or combine. This is what we’re doing: we’re joining the new item to the vector.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp7" data-monoline="true">
         (vector 5 10 15)
       </script>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp8" data-monoline="true">
         (conj [5 10] 15)
       </script>
       <p>
@@ -165,32 +165,32 @@
       <p>
         <strong>count</strong> gives us a count of the number of items in a vector.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp9" data-monoline="true">
         (count [5 10 15])
       </script>
       <p>
         <strong>nth</strong> gives us the nth item in the vector. Note that we start counting at 0, so in the example, calling nth with the number 1 gives us what we’d call the second element when we aren’t programming.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp10" data-monoline="true">
         (nth [5 10 15] 1)
       </script>
       <p>
         <strong>first</strong> returns the first item in the collection.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp11" data-monoline="true">
         (first [5 10 15])
       </script>
       <p>
         <strong>rest</strong> returns all except the first item.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp12" data-monoline="true">
         (rest [5 10 15])
       </script>
       <p>
         <strong>concat</strong>
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (concat ["Isabel" "Jordan"] ["Brisa" "Baptiste"])
+      <script type="cljs" class="editor" data-cmid="exp13" data-monoline="true">
+        (concat ["Isabel" "Jordan"] ["Brisa"])
       </script>
       <h4>
         Maps
@@ -207,49 +207,51 @@
         <br></br>
         This is an empty map. Add some key-value pairs!
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp14" data-monoline="true">
         {}
       </script>
       <p>
         <strong>assoc</strong> and <strong>dissoc</strong> are paired functions: they associate and disassociate items from a map.
         See how we add the last name “Mitchell” to the map with assoc, and then we remove it with dissoc.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp15" data-monoline="true">
         (assoc {:first "Chelsey"} :last "Mitchell")
       </script>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (dissoc {:first "Chelsey" :last "Mitchell"} :last)
+      <script type="cljs" class="editor" data-cmid="exp16" data-monoline="true">
+        (dissoc {:first "Chelsey" :last "Lucas"} :last)
       </script>
       <p>
         <strong>merge</strong> merges two maps together to make a new map.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp17" data-monoline="true">
         (merge {:first "Chelsey"} {:last "Mitchell"})
       </script>
       <p>
         <strong>count</strong> every collection has this function. Why do you think the answer is two? count is returning the number of associations.
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp18" data-monoline="true">
         (count {:first "Chelsey" :last "Mitchell"})
       </script>
       <p>
-        <strong>concat</strong>Since map is a key-value pair, the key is used to get a value from a map. One of the ways often used in Clojure is the examples below. We can use a keyword like using a function in order to look up values in a map. 
+        Since map is a key-value pair, the key is used to get a value from a map. One of the ways often used in Clojure is the examples below. We can use a keyword like using a function in order to look up values in a map. 
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (:first {:first "Chelsey" :last "Mitchell"})
+      <script type="cljs" class="editor" data-cmid="exp19" data-monoline="true">
+        (:first {:first "Chelsey" :last "Baptiste"})
       </script>
       <p>
         Then we have <strong>keys</strong> and <strong>vals</strong>, which are pretty simple: they return the keys and values in the map. The order is not guaranteed, so we could have gotten (:first :last) or (:last :first).
       </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp20" data-monoline="true">
         (keys {:first "Chelsey" :last "Mitchell"})
       </script>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+      <script type="cljs" class="editor" data-cmid="exp21" data-monoline="true">
         (vals {:first "Chelsey" :last "Mitchell"})
       </script>
       <p>
         Simple values such as numbers, keywords, and strings are not the only types of things you can put into collections. You can also put other collections into collections, so you can have a vector of maps, or a list of vectors, or whatever combination fits your data.
       </p>
+      <sub>At the request of the survivors, the names have been changed. Out of respect for the dead,
+        the rest has been told exactly as it occurred</sub>
     </div>
     <script src="js/oneline.js" type="text/javascript"></script>
     <script src="js/compiled/clojure_cup_2015.js" type="text/javascript"></script>
