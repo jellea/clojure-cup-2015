@@ -20,7 +20,7 @@
       <div>
         <p><em>
           Goodday, traveler. Today you embark upon a journey into Quil. May your
-          eyes be bright, for there are sights to behold.
+          sight be keen, for there are sights to behold.
         </em></p>
         <p>
           This is a tutorial for Quil, a visual programming system that combines
@@ -95,8 +95,82 @@
         </script>
 
         <p>
-          Lorem ipsum
+          Quil also lets you interact with keyboard and mouse. Try moving your
+          mouse over the canvas, and you should see circles appear. This is an
+          example of a sketch that has <em>state</em>. This means that how it
+          looks depends on its history, in this case, the past positions of the
+          mouse.
         </p>
+
+        <script type="cljs" class="editor" data-cmid="mouse-draw">
+(def colors [[244 213 221]
+             [249 202 216]
+             [232 181 188]
+             [240 155 150]
+             [209 188 219]
+             [204 199 241]
+             [177 196 227]
+             [194 208 233]
+             [198 221 245]
+             [202 216 247]])
+
+(defn register-mouse-position [state]
+  (let [x (mouse-x)
+        y (mouse-y)]
+    (if (and (> x 0) (> y 0) (< x (width)) (< y (height)))
+      (conj state {:pos [x y] :color (rand-nth colors)})
+      state)))
+
+(defn move-dots-down [state]
+  (->> state
+    (map #(update-in % [:pos 1] inc))
+    (filter (fn [{[_ y] :pos}] (> y (height))))))
+
+(defn draw-points [state]
+  (stroke-weight 8)
+  (doseq [{[x1 y1] :pos color :color} state]
+  (apply stroke color)
+    (point x1 y1)))
+
+(defn setup []
+  (background 244 213 221)
+  ;; The initial state is just empty list
+  (list))
+
+(sketch
+  :host "mouse-draw"
+  :size [300 300]
+  :setup #'setup
+
+  ;; For each update cycle, register the new mouse position,
+  ;; then move all dots down
+  :update #'register-mouse-position
+  :draw #'draw-points
+  :middleware [quil.middleware/fun-mode])
+        </script>
+
+        <h2>Creating a sketch</h2>
+
+        <p>
+          To get Quil do draw something, the minimum you need is a draw
+          function. You then pass this on to Quil when you call "sketch". Quil
+          can take other functions as well, like a setup function, which is
+          called once when your sketch starts to run.
+        </p>
+
+        <p>
+          The <pre>:host</pre> is the HTML "id" of the canvas
+          element where Quil will draw your sketch. We already set up a canvas
+          for you, so no need to worry about that.
+        </p>
+
+        <h2>Advanced Examples</h2>
+
+        <p>
+          These examples are taken from the Quil site. Can you find out how they work?
+        </p>
+
+        <h3>Tailspin by Erik Svedäng</h3>
 
         <script type="cljs" class="editor" data-cmid="tailspin">
 (defn setup []
@@ -146,7 +220,6 @@
   :update #'update-state
   :draw #'draw-state
   :middleware [quil.middleware/fun-mode])
-
         </script>
 
       </div>

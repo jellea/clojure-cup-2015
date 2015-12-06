@@ -41,14 +41,51 @@ h1,h2,p,em,i,span {
 }
 
 canvas {
-    transform-origin: top;
-    transition: transform 200ms ease-out;
-    transform: translate(-30px,15px);
     border: 5px #2C2C2C solid;
     border-left: none;
     width: 300px;
     height: 300px;
-    z-index: 2;
     border-radius: 0 5px 5px 0;
+}
+
+.holder {
+    transform-origin: top;
+    transition: transform 200ms ease-out;
+    transform: translate(-30px,15px);
+    z-index: 2;
     position: relative;
+}
+
+.error {
+    font-family: "Input Mono Comp";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 14px;
+    border-radius: 5px;
+    padding: 10px;
+    transform-origin: bottom;
+    transform: translate(-10px,-60px);
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    max-width: 260px;
+    color: white;
+    z-index: 3;
+    position: relative;
+    background-color: red;
+    float: right;
+    animation: fade-in-bottom 0.2s ease-in-out 1;
+}
+
+.error:before {
+    content: "\2639";
+    font-size: 16px;
+}
+
+@keyframes fade-in-bottom {
+    from {opacity: 0;
+          transform: translate(-10px,0px);}
+    to   {opacity: 1;
+          transform: translate(-10px,-60px);}
 }
