@@ -131,6 +131,21 @@
         (+ 1 2 3 4 5 6 7 8 9)
       </script>
       <h3>
+        Some basic Clojure functions
+      </h3>
+      <p>
+        <strong>str</strong> this example combines two strings, but try changing one of them to a number.
+      </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (str "hey " "there")
+      </script>
+      <p>
+        <strong>inc</strong>
+      </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (inc 5)
+      </script>
+      <h3>
         Data Structures
       </h3>
       <p>
@@ -146,32 +161,47 @@
         Vectors are written using square brackets with any number of pieces of data inside them, separated by spaces. Here are some examples of vectors:
       </p>
       <p>
-        In this example, we use the conj function to add a number to an existing vector.
-        </p>
+        The next two functions are used to make new vectors. The vector function takes any number of items and puts them in a new vector. conj is an interesting function that you’ll see used with all the data structures. With vectors, it takes a vector and an item and returns a new vector with that item added to the end of the vector. Why the name conj? conj is short for conjoin, which means to join or combine. This is what we’re doing: we’re joining the new item to the vector.
+      </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (conj [1 2 3 50 100] 10) 
+        (vector 5 10 15)
+      </script>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (conj [5 10] 15)
+      </script>
+      <p>
+        Now, take a look at these four functions.
+      </p>
+      <p>
+        <strong>count</strong> gives us a count of the number of items in a vector.
+      </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (count [5 10 15])
+      </script>
+      <p>
+        <strong>nth</strong> gives us the nth item in the vector. Note that we start counting at 0, so in the example, calling nth with the number 1 gives us what we’d call the second element when we aren’t programming.
+      </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (nth [5 10 15] 1)
+      </script>
+      <p>
+        <strong>first</strong> returns the first item in the collection.
+      </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (first [5 10 15])
+      </script>
+      <p>
+        <strong>rest</strong> returns all except the first item.
+      </p>
+      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
+        (rest [5 10 15])
       </script>
       <h4>
         Vectors
       </h4>
       <p>
       </p>
-      <h3>
-        Some basic Clojure functions
-      </h3>
       <p>
-        <strong>str</strong> this example combines two strings, but try changing one of them to a number.
-      </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (str "hey " "there")
-      </script>
-      <p>
-        <strong>inc</strong>
-      </p>
-      <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
-        (inc 5)
-      </script>
-       <p>
         <strong>concat</strong>
       </p>
       <script type="cljs" class="editor" data-cmid="exp-precedence" data-monoline="true">
