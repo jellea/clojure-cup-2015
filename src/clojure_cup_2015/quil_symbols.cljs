@@ -284,12 +284,23 @@
 
 (def live-sketches (atom {}))
 
-(defn sketch-wrapper [& {:keys [host] :as opts}]
-  (when-let [sketch (get @live-sketches host)]
-    (.exit sketch))
+(defn sketch*
+  "Start a new sketch and store it with the original options."
+  [opts]
   (let [new-sketch (apply quil.core/sketch (apply concat opts))]
-    (swap! live-sketches assoc host new-sketch))
-)
+    (swap! live-sketches assoc host {:sketch new-sketch
+                                     :opts opts})))
+
+(defn sketch-wrapper
+  "Start a sketch, but idempotent. If an identical sketch is running, leave it
+  alone, if a sketch with different options but same id (host) is running, stop
+  the old one and start a new one."
+  [& {:keys [host] :as opts}]
+  (if-let [sketch (get @live-sketches host)]
+    (when-not (= (:opts sketch) sketch)
+      (.exit (:sketch sketch))
+      (sketch* opts))
+    (sketch* opts)))
 
 (defn import-symbols-src
   "A hack to make quil functions available in the main namespace, generates a
