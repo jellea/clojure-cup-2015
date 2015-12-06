@@ -79,6 +79,11 @@
       (dismiss!)
       (swap! !state assoc :result (str value)))))
 
+(defn find-value [editor {:keys [value]}]
+  ;;(js/console.log value)
+  (if value
+    (add-inline {:line 0 :ch 100 :text value} editor)))
+
 (defn eval
   ([name-space in-str]
    (eval name-space in-str #()))
@@ -129,11 +134,13 @@
                    (quil-symbols/import-symbols-src)
                    (.getValue editor))
               (partial find-error id))
-                                        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
+        
         (when (:monoline props)
           (js/oneLineCM editor)
-          ;;(add-inline {:line 0 :ch 100 :text "test"} editor)
-          )
+          (.on editor "change" (debounce #(eval name-space
+                                              (.getValue editor)
+                                              (partial find-value editor)))))
+
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
                                               (partial find-error id))))
