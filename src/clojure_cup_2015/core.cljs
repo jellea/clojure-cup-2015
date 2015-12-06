@@ -29,6 +29,11 @@
      (when (and error (= id cid))
        [:p.error (:message error)])]))
 
+(defn revert! [id _]
+  (prn id)
+
+  )
+
 (defn canvas-editor
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
@@ -41,7 +46,7 @@
                         :position "relative"
                         :z-index 400
                         :transform "translateY(-45px)"}}
-    [:div.btn.bg-red.rounded.mr1 "revert code"]
+    [:div.btn.bg-red.rounded.mr1 {:on-click (partial revert! id)} "revert code"]
     [:div.btn.bg-green.rounded "restart sketch"]]])
 
 (defn monoline-editor

@@ -105,7 +105,7 @@
   (let [left (.-pageX event)
         top (.-pageY event)
         line-char (.coordsChar editor #js {"left" left
-                                          "top" top })
+                                           "top" top })
         char (.-ch line-char)
         line (.-line line-char)]
 
@@ -141,23 +141,6 @@
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 
-    ; :did-unmount
-    ; (fn [this]
-    ;  (let [sketches quil-symbols/live-sketches
-    ;        dom-node (reagent/dom-node this)
-    ;        editor (.fromTextArea js/CodeMirror dom-node opts)]
-    ;   (doseq [e ["change" "cursorActivity"]]
-    ;     (.off editor e))
-    ;   (.exit (get sketches (:id props)))
-    ;   (swap! sketches dissoc (:id props))))
-
-    :should-component-update
-    (fn [this]
-      (let [editor  (:editor (reagent/state this))
-            value   (:code (:code @!state))
-            update? (not= value (.getValue editor))]
-        (when update? (.setValue editor value))
-        update?))
-
     :reagent-render
-    (fn [_] [:textarea {:default-value (:default-value props)}])}))
+    (fn [_]
+      [:textarea {:default-value (:default-value props)}])}))
