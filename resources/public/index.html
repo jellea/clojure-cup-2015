@@ -39,8 +39,22 @@
           visuals.
         </p>
         <p>
-          The road to Quil starts in the Pine Forest. Try changing some
-          numbers and see what happens!
+          You'll find many sketches in this tutorial. All of them are "live",
+          change the code and you should immediately see the sketch change.
+          Hover over a Quil function name to see what it does.
+        </p>
+
+        <h2>A Taste of Quil</h2>
+        <p>
+          These first few sketches will give you a taste of things to come. They
+          are presented without much explanation. We'll dive into the details
+          later. Play around with them, there's nothing you can break. Should you happen to make a mess you simply hit the red "revert" button, and you get the original code back.
+        </p>
+
+        <h3>The Pine Forest</h3>
+        </p>
+          The road to Quil starts in the Pine Forest. Try changing some numbers
+          and see what happens!
         </p>
 
         <!-- <script type="cljs" class="editor" data-cmid="test" data-monoline="true"> -->
@@ -79,11 +93,13 @@
           turtleneck and aunt Juliet will envy you forever. But there's more,
           how about we get things moving a bit?
         </p>
-        <p>
-          This is the simplest version of an animation. It uses the current
-          `frame-count` to determine the position of the circle.
-        </p>
 
+        <h3>The Carrousel</h3>
+        <p>
+          Time to make your head spin! This is an example of an animation. It
+          uses the current `frame-count` to determine the position of the
+          circle.
+        </p>
         <script type="cljs" class="editor" data-cmid="carousel">
 (defn draw-carousel []
   (background 255)
@@ -103,12 +119,17 @@
   :draw #'draw-carousel)
         </script>
 
+        <h3>Paint Blotches</h3>
+
         <p>
-          Quil also lets you interact with keyboard and mouse. Try moving your
-          mouse over the canvas, and you should see circles appear. This is an
-          example of a sketch that has <em>state</em>. This means that how it
-          looks depends on its history, in this case, the past positions of the
-          mouse.
+          Quil also lets you interact with keyboard and mouse. Move your mouse
+          over the canvas to smear it with thick blotches of paint that run down
+          the canvas.
+        </p>
+        <p>
+          This is an example of a sketch that has <em>state</em>. This means
+          that how it looks depends on its history, in this case, the past
+          positions of the mouse.
         </p>
 
         <script type="cljs" class="editor" data-cmid="paint-blotch">
@@ -174,57 +195,13 @@
 
         <p>
           Inside the <tt>:draw</tt> you have access to a long list of functions
-          provided by Quil. You already used many of them, they let you
-        </p>
-        <p>
-          draw shapes :
-        </p>
-        <ul>
-          <li><tt>(triangle x1 y1, x2 y2, x3 y3)</tt></li>
-          <li><tt>(rect x1 y1, x2 y2)</tt></li>
-          <li><tt>(ellipse x1 y1, width, height)</tt></li>
-          <li><tt>(point x1 y1)</tt></li>
-          <li><tt>(background red green blue)</tt></li>
-        </ul>
-        <p>
-          manipulate the drawing context:
-        </p>
-        <ul>
-          <li><tt>(fill red green blue)</tt></li>
-          <li><tt>(stroke red green blue)</tt></li>
-          <li><tt>(stroke-weight weight)</tt></li>
-          <li><tt>(no-stroke)</tt></li>
-        </ul>
-
-        <p>
-          inspect or change the state of Quil:
-        </p>
-        <ul>
-          <li><tt>(width)</tt></li>
-          <li><tt>(height)</tt></li>
-          <li><tt>(frame-count)</tt></li>
-          <li><tt>(frame-rate r)</tt></li>
-        </ul>
-
-        <p>
-          interact with mouse or keyboard
-        </p>
-
-        <ul>
-          <li><tt>(mouse-x)</tt></li>
-          <li><tt>(mouse-y)</tt></li>
-        </ul>
-
-        <p>
-          Keep the <a href="http://quil.info/api/">Quil API reference</a> close
-          to you at all times. Hang it above your bed, keep it under your
-          pillow. It's a magical toolbox providing endless opportunities for
-          your creations.
+          provided by Quil. Keep the <a href="http://quil.info/api/">Quil API
+          reference</a> close to you at all times. Hang it above your bed, keep
+          it under your pillow. It's a magical toolbox providing endless
+          opportunities for your creations.
         </p>
 
         <h2>Drawing shapes</h2>
-
-
 
         <p>
           When you draw a shape, it stays there until you draw something on top
@@ -233,6 +210,8 @@
           color, so you can use it in your draw function to clear the canvas
           before drawing the new frame.
         </p>
+
+        <h2>Animation and State</h2>
 
         <h2>Advanced Examples</h2>
 
