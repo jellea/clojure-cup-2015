@@ -1,6 +1,8 @@
 (ns clojure-cup-2015.core
   (:require-macros [clojure-cup-2015.macro :refer [read-snippets]])
   (:require [reagent.core :as reagent]
+            [dommy.core :as d
+             :refer-macros [sel sel1]]
             [clojure-cup-2015.editor :refer [cm-editor]]
             [clojure-cup-2015.common :refer [config !state]]
             [cljsjs.codemirror]
@@ -32,7 +34,7 @@
   [:div [cm-editor {:default-value default-code
                     :monoline true
                     :id id}
-                   {:scrollbarStyle "null"}]])
+         {:scrollbarStyle "null"}]])
 
 (defn inject-editors
   "Replace [:quil-code ...] in the content data with canvas-editor components."
@@ -49,7 +51,15 @@
 
 (defn on-js-reload [])
 
+(defn mirrorize! []
+  (doseq [editor (sel ".editor")]
+    (let [cmid (d/attr editor "data-cmid")]
+      (d/remove-class! editor "editor") ;; only replace once (d/add-class! editor "cm")
+      (reagent/render-component [canvas-editor cmid (.-innerHTML editor)] editor))))
+
 (defn init []
-  (reagent/render-component bang-bang (. js/document (getElementById "app"))))
+  (mirrorize!)
+  #_(reagent/render-component bang-bang
+                              (. js/document (getElementById "app"))))
 
 (init)
