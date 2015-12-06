@@ -64,7 +64,7 @@ canvas {
     border-radius: 5px;
     padding: 10px;
     transform-origin: bottom;
-    transform: translate(-15px,-60px);
+    transform: translate(-10px,-60px);
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
@@ -85,7 +85,7 @@ canvas {
 
 @keyframes fade-in-bottom {
     from {opacity: 0;
-          transform: translate(-15px,0px);}
+          transform: translate(-10px,0px);}
     to   {opacity: 1;
-          transform: translate(-15px,-60px);}
+          transform: translate(-10px,-60px);}
 }
