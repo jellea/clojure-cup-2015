@@ -23,11 +23,13 @@ body {
   font-style: normal;
   font-weight: normal;
   padding: 15px;
+  padding-right: 45px;
   background-color: #2C2C2C;
   color: white;
   height: auto;
-  z-index: 100;
+  z-index: 1;
   border-radius: 5px;
+  position: relative;
 }
 
 .CodeMirror:not(.mono-line){
@@ -37,11 +39,12 @@ body {
 canvas {
     transform-origin: top;
     transition: transform 200ms ease-out;
-    transform: translateY(5px);
+    transform: translate(-30px,15px);
     border: 5px #2C2C2C solid;
     border-left: none;
     width: 300px;
     height: 300px;
-    z-index: 1;
+    z-index: 2;
     border-radius: 0 5px 5px 0;
+    position: relative;
 }

@@ -17,8 +17,8 @@
   (when canvas-id
     (let [canvas (.getElementById js/document canvas-id)
           cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 1) "local")
-          height (min (max (- cmheight (.-height canvas)) 5))]
-      (set! (.. canvas -style -transform) (str "translateY(" height "px)")))))
+          height (min (max (- cmheight (.-height canvas)) 15))]
+      (set! (.. canvas -style -transform) (str "translate(-30px," height "px)")))))
 
 (defn outer-sexp
   "Returns the outer sexp"
