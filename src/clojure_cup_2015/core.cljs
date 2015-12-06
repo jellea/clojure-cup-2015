@@ -36,7 +36,13 @@
    [:div.right.holder {:id (str id "_holder")}
     [:canvas {:id id}]
     [error-display id]]
-   [cm-editor {:default-value default-code :id id} {}]])
+   [cm-editor {:default-value default-code :id id} {}]
+   [:div.right {:style {:margin-right "315px"
+                        :position "relative"
+                        :z-index 400
+                        :transform "translateY(-45px)"}}
+    [:div.btn.bg-red.rounded.mr1 "revert code"]
+    [:div.btn.bg-green.rounded "restart sketch"]]])
 
 (defn monoline-editor
   [id default-code]
@@ -62,8 +68,6 @@
     (mirrorize-one! e)))
 
 (defn init []
-  (mirrorize!)
-  #_(reagent/render-component bang-bang
-                              (. js/document (getElementById "app"))))
+  (mirrorize!))
 
 (init)
