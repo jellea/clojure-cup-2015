@@ -54,7 +54,8 @@
         </p>
 
         <h3>The Pine Forest</h3>
-        </p>
+
+        <p>
           The road to Quil starts in the Pine Forest. Try changing some numbers
           and see what happens!
         </p>
@@ -419,6 +420,82 @@
  :draw #'draw-state
  :middleware [m/fun-mode])
          </script>
+
+
+        <h3>Dry Paint by Erik Svedäng</h3>
+
+        <p>
+          <a href="http://quil.info/sketches/show/example_dry-paint">Dry Paint by Erik Svedäng on Quil.info</a>
+        </p>
+
+        <script type="cljs" class="editor" data-cmid="dry-paint">
+(defn pulse [low high rate millis]
+  (let [diff (- high low)
+             half (/ diff 2)
+             mid (+ low half)
+             s (/ millis 1000.0)
+             x (sin (* s (/ 1.0 rate)))]
+    (+ mid (* x half))))
+
+(def letter-Q [[3 2] [2 3] [2 4] [2 5] [2 6] [3 7]
+               [4 8] [5 8]
+               [5 6] [6 7] [7 8]
+               [7 6] [7 5] [7 4] [7 3] [6 2]
+               [5 1] [4 1]])
+
+(def step 20)
+
+(defn create-color [millis]
+  [(pulse 0 255 3.0 millis)
+   (pulse 0 255 5.0 millis)
+   (pulse 0 255 7.0 millis)])
+
+(defn setup []
+  (frame-rate 100)
+  (background 255)
+  (zipmap letter-Q
+          (map create-color (iterate #(+ % 200) 10000))
+          ))
+
+(defn get-lamp-index []
+  (if (and (< 0 (mouse-x) (width))
+           (< 0 (mouse-y) (height)))
+      [(quot (mouse-x) step)
+       (quot (mouse-y) step)]
+    nil))
+
+(defn update-state [state]
+  (if-let [index (get-lamp-index)]
+      (assoc state index (create-color (millis)))
+    state))
+
+(defn draw-state [state]
+  (no-stroke)
+  (background 255)
+  (no-stroke)
+  (let [w (width)
+          h (height)
+          hw (/ w 2)
+          hh (/ h 2)]
+    (doseq [[ind col] state]
+           (let [x (* step (first ind))
+                   y (* step (second ind))
+                   col-mod (-> (+ x y (millis))
+                               (* 0.01)
+                               (sin)
+                               (* 5))]
+             (apply fill (map + col (repeat 3 col-mod)))
+             (rect x y step step)))))
+
+(sketch
+ :host "dry-paint"
+ :size [300 300]
+ :setup #'setup
+ :update #'update-state
+ :draw #'draw-state
+ :middleware [m/fun-mode])
+
+  </script>
 
         <h2>About Us</h2>
 
