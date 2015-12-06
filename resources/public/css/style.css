@@ -56,6 +56,10 @@ pre {
   min-height: 320px;
 }
 
+.CodeMirror-widget {
+  color: rgb(5, 255, 13);
+}
+
 canvas {
     border: 5px #2C2C2C solid;
     border-left: none;
