@@ -75,8 +75,8 @@
           `frame-count` to determine the position of the circle.
         </p>
 
-        <script type="cljs" class="editor" data-cmid="carrousel">
-(defn draw-carrousel []
+        <script type="cljs" class="editor" data-cmid="carousel">
+(defn draw-carousel []
   (background 255)
   (no-stroke)
   (fill 252 90 44)
@@ -89,9 +89,9 @@
       (ellipse x y, width height)))
 
 (sketch
-  :host "carrousel"
+  :host "carousel"
   :size [300 300]
-  :draw #'draw-carrousel)
+  :draw #'draw-carousel)
         </script>
 
         <p>
