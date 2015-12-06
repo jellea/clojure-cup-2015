@@ -274,6 +274,103 @@
 
         <h2>Animation and State</h2>
 
+        <p>
+          Drawing shapes is good, but making them move is better!
+        </p>
+
+        <p>
+          This next sketch is an adaptation of a sketch by by Erik Svedäng.
+        </p>
+
+        <script type="cljs" class="editor" data-cmid="hyper">
+(defn new-state []
+  {:radius 0.0
+   :color [(random 200 255) (random 0 150) (random 100 255)]})
+
+(defn setup []
+  (frame-rate 100)
+  (background 255)
+  (rect-mode :center)
+  (new-state))
+
+(defn tick [state]
+  (update-in state [:radius] + 5.0))
+
+(defn update-state [state]
+  (if (< (:radius state) 300)
+    (tick state)
+    (new-state)))
+
+(defn draw-state [state]
+  (apply stroke (:color state))
+  (let [hw (* 0.5 (width))
+        hh (* 0.5 (height))]
+    (dotimes [_ (quot (width) 10)]
+      (let [rand-ang (random 0 q/TWO-PI)
+            r (:radius state)]
+        (line hh hw
+              (+ hh (* (sin rand-ang) r))
+              (+ hw (* (cos rand-ang) r)))))))
+
+(sketch
+  :host "hyper"
+  :size [300 300]
+  :setup #'setup
+  :update #'update-state
+  :draw #'draw-state
+  :middleware [m/fun-mode])
+         </script>
+
+
+        <h2>Advanced Examples</h2>
+
+        <p>
+          These examples are taken from the Quil site. Can you find out how they work?
+        </p>
+
+        <h3>Tailspin by Erik Svedäng</h3>
+
+        <script type="cljs" class="editor" data-cmid="tailspin">
+(defn setup []
+  (frame-rate 30)
+  (let [max-r (/ (width) 2)
+        n (int (map-range (width)
+                            200 500
+                            20 50))]
+   {:dots (into [] (for [r (map #(* max-r %)
+                                (range 0 1 (/ n)))]
+                     [r 0]))}))
+
+(def speed 0.0003)
+
+(defn move [dot]
+  (let [[r a] dot]
+    [r (+ a (* r speed))]))
+
+(defn update-state [state]
+  (update-in state [:dots] #(map move %)))
+
+(defn dot->coord [[r a]]
+  [(+ (/ (width) 2) (* r (cos a)))
+   (+ (/ (height) 2) (* r (sin a)))])
+
+(defn draw-state [state]
+  (background 255)
+  (fill 0)
+  (let [dots (:dots state)]
+    (loop [curr (first dots)
+           tail (rest dots)
+           prev nil]
+      (let [[x y] (dot->coord curr)]
+        (ellipse x y 5 5)
+        (when prev
+          (let [[x2 y2] (dot->coord prev)]
+            (line x y x2 y2))))
+      (when (seq tail)
+        (recur (first tail)
+               (rest tail)
+               curr)))
+         </script>
 
 
         <h2>Advanced Examples</h2>
