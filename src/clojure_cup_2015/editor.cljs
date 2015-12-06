@@ -22,12 +22,10 @@
 
 (defn move-canvas
   [cm canvas-id]
-  (js/console.log canvas-id)
   (when canvas-id
     (let [canvas (.getElementById js/document (str canvas-id "_holder"))
           cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 1) "local")
           height (min (max (- cmheight 300) 15))]
-      (js/console.log cmheight height)
       (set! (.. canvas -style -transform) (str "translate(-30px," height "px)")))))
 
 (defn outer-sexp
