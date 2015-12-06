@@ -1,6 +1,8 @@
 (ns clojure-cup-2015.core
   (:require-macros [clojure-cup-2015.macro :refer [read-snippets]])
   (:require [reagent.core :as reagent]
+            [dommy.core :as d
+             :refer-macros [sel sel1]]
             [clojure-cup-2015.editor :refer [cm-editor]]
             [clojure-cup-2015.common :refer [config !state]]
             [cljs.js :as cljs]
@@ -105,12 +107,19 @@
 
 (defn on-js-reload [])
 
+(defn mirrorize! []
+  (doseq [editor (sel ".editor")]
+    (let [cmid (d/attr editor "data-cmid")]
+      (d/remove-class! editor "editor") ;; only replace once (d/add-class! editor "cm")
+      (reagent/render-component [canvas-editor cmid (.-innerHTML editor)] editor))))
+
 (defn init []
   (eval (str "(ns fiddle.runtime
      (:require [quil.core :as q]
                [quil.middleware :as m]))"
              (quil-symbols/import-symbols-src)))
-  (reagent/render-component bang-bang
-                            (. js/document (getElementById "app"))))
+  (mirrorize!)
+  #_(reagent/render-component bang-bang
+                              (. js/document (getElementById "app"))))
 
 (init)

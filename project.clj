@@ -8,6 +8,8 @@
                  [org.clojure/clojurescript "1.7.170"]
                  [org.clojure/core.async "0.2.374"]
 
+                 [prismatic/dommy "1.1.0"]
+
                  [quil "2.3.0"]
                  [cljsjs/codemirror "5.8.0-0"]
                  [reagent "0.5.0"]
