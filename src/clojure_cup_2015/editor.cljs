@@ -155,7 +155,7 @@
           (eval name-space
                 (.getValue editor)
                 (partial find-value editor))
-          
+
           (.on editor "change" (debounce #(eval name-space
                                                 (.getValue editor)
                                                 (partial find-value editor))
@@ -170,7 +170,8 @@
 
         (d/listen! (.getWrapperElement editor) :mouseover #(handle-mouse-over name-space editor %))
 
-        (.on editor "cursorActivity" #(move-canvas % (:id props)))
+        (when-not (:monoline props)
+          (.on editor "cursorActivity" #(move-canvas % (:id props))))
         (reagent/set-state this {:editor editor})))
 
     :reagent-render
