@@ -1,4 +1,5 @@
 (ns clojure-cup-2015.core
+  (:require-macros [clojure-cup-2015.macro :refer [read-snippets]])
   (:require [reagent.core :as reagent]
             [clojure-cup-2015.editor :refer [cm-editor]]
             [clojure-cup-2015.common :refer [config !state]]
@@ -11,6 +12,8 @@
             [clojure-cup-2015.content :as content]
             [quil.core]
             [quil.middleware]))
+
+(def snippets (read-snippets 5))
 
 (enable-console-print!)
 
