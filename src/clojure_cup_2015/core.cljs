@@ -34,6 +34,7 @@
   [:div
    [:div.right.holder {:id (str id "_holder")}
     [:canvas {:id id}]
+    [:i {:class "fa fa-lg fa-history"}]
     [error-display]]
    [cm-editor {:default-value default-code :id id} {}]])
 
