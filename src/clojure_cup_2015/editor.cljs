@@ -110,7 +110,7 @@
   (let [left (.-pageX event)
         top (.-pageY event)
         line-char (.coordsChar editor #js {"left" left
-                                           "top" top })
+                                           "top" top}) 
         char (.-ch line-char)
         line (.-line line-char)
         token (.-string (.getTokenAt editor #js {"ch" char "line" line}))]
@@ -121,28 +121,44 @@
 
 (def mirrors (atom {}))
 
+(defn in-viewport? [cm init !initiated?]
+  (let [dom-node (.getWrapperElement cm)
+        rects (.getBoundingClientRect dom-node)
+        vh (or (.-innerHeight js/window) (aget js/document "documentElement" "clientHeight"))
+        in-view? (and (< (.-top rects) vh)
+                      (> (.-bottom rects) 0))]
+    (when (and in-view? (not @!initiated?))
+      (reset! !initiated? true) (init)))) ; TODO destroy!
+
 (defn cm-editor
   "CodeMirror reagent component"
   [props cm-opts]
   (reagent/create-class
    {:component-did-mount
     (fn [this]
-      (let [id (:id props)
-            name-space (str (:id props) ".user")
-            dom-node (reagent/dom-node this)
-            opts (clj->js (merge opts cm-opts))
-            editor (.fromTextArea js/CodeMirror dom-node opts)]
+      (let [id          (:id props)
+            name-space  (str (:id props) ".user")
+            dom-node    (reagent/dom-node this)
+            opts        (clj->js (merge opts cm-opts))
+            editor      (.fromTextArea js/CodeMirror dom-node opts)
+            !initiated? (atom false)
+            init        #(eval name-space
+                               (str (ns-str name-space)
+                                    (quil-symbols/import-symbols-src)
+                                    (.getValue editor))
+                               (partial find-error id))]
+
         (swap! mirrors assoc id editor)
-        (eval name-space
-              (str (ns-str name-space)
-                   (quil-symbols/import-symbols-src)
-                   (.getValue editor))
-              (partial find-error id))
+
         (when (:monoline props)
           (js/oneLineCM editor)
           (.on editor "change" (debounce #(eval name-space
-                                                (.getValue editor)
-                                                (partial find-value editor)))))
+                                              (.getValue editor)
+                                              (partial find-value editor))
+                                         200)))
+
+        (.addEventListener js/document "scroll"
+                           (debounce #(in-viewport? editor init !initiated?) 100))
 
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)

@@ -49,6 +49,7 @@ canvas {
     width: 300px;
     height: 300px;
     border-radius: 0 5px 5px 0;
+    background-color: white;
 }
 
 .holder {
