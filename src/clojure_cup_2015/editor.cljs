@@ -112,11 +112,12 @@
         line-char (.coordsChar editor #js {"left" left
                                           "top" top })
         char (.-ch line-char)
-        line (.-line line-char)]
+        line (.-line line-char)
+        token (.-string (.getTokenAt editor #js {"ch" char "line" line}))]
 
-    (if-let [doc (get quildocs (.-string
-                                (.getTokenAt editor #js {"ch" char "line" line})))]
-      (reset! !tooltip {:left left :top top :doc doc}))))
+    (if-let [doc (get quildocs token)]
+      (reset! !tooltip {:left left :top top :doc doc :name token})
+      (reset! !tooltip nil))))
 
 (defn cm-editor
   "CodeMirror reagent component"

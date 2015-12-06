@@ -52,10 +52,19 @@
          {:scrollbarStyle "null"}]])
 
 (defn tooltip [tt]
-  (if tt
-    (let [{left :left top :top doc :doc} tt]
-      [:div.tooltip {:style {:position "absolute" :left left :top top}}
-       doc])
+  (if @tt
+    (let [{left :left top :top doc :doc name :name} @tt]
+      [:div.tooltip {:style {:position "absolute"
+                             :left left :top top
+                             :z-index 2000000
+                             :backgroundColor "#d0faf4"
+                             :border "2px solid #c6ddf5"
+                             :maxWidth  "40em"
+                             :maxHeight "10000px"
+                             :padding "1em"}}
+       [:div {:style {:textDecoration "underline"
+                      :fontWeight "bold"}} name]
+       [:div doc]])
     [:div]))
 
 (defn on-js-reload [])
@@ -78,7 +87,6 @@
 
 (defn init []
   (mirrorize!)
-  ;;(reagent/render-component [tooltip !tooltip] (d/sel1 :body))
-  )
+  (reagent/render-component [tooltip !tooltip] (d/sel1 :#tooltip)))
 
 (init)
