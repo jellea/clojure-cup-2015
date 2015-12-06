@@ -54,20 +54,26 @@
 
 (defonce cljs-compiler-state (cljs/empty-state))
 
+(defn on-evaluated [x]
+  (prn x))
+
 (defn eval
   ([name-space in-str]
    (eval name-space in-str #()))
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
-      (cljs/eval-str st in-str (symbol name-space)
-        {:eval cljs/js-eval
-          :ns (symbol name-space)
-          ;;:verbose true
+     (try
+       (cljs/eval-str st in-str (symbol name-space)
+                      {:eval cljs/js-eval
+                       :ns (symbol name-space)
+                       ;;:verbose true
 
-          ;; don't ask me why this works. It stops Clojurescript from complaining that
-          ;; *load-fn* isn't defined
-          :load (fn [_ cb] (cb {:lang :clj :source ""}))}
-        callback))))
+                       ;; don't ask me why this works. It stops Clojurescript from complaining that
+                       ;; *load-fn* isn't defined
+                       :load (fn [_ cb] (cb {:lang :clj :source ""}))}
+                      callback)
+       (catch js/Error e
+         (prn "Caught exception:" e))))))
 
 (defn cm-editor
   "CodeMirror reagent component"
@@ -83,12 +89,14 @@
         (eval name-space (str "(ns " name-space "
                            (:require [quil.core :as q]
                                      [quil.middleware :as m]))"
-                           (quil-symbols/import-symbols-src)))
-        (eval name-space (.getValue editor))
-        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
+                              (quil-symbols/import-symbols-src)))
+        (eval name-space (.getValue editor) on-evaluated)
+                                        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
-        (.on editor "change" #(eval name-space (outer-sexp editor)))
+        (.on editor "change" #(eval name-space
+                                    (outer-sexp editor)
+                                    on-evaluated))
         (.on editor "cursorActivity" #(move-canvas % (:id props)))
         (reagent/set-state this {:editor editor})))
 

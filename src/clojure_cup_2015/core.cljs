@@ -52,7 +52,6 @@
 (defn on-js-reload [])
 
 (defn mirrorize-one! [e]
-  (prn e)
   (let [cmid (d/attr e "data-cmid")
         text (->> e .-text clojure.string/trim)
         new (d/create-element :div)]
