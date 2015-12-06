@@ -17,6 +17,10 @@ body {
   border-radius: 5px;
 }
 
+.CodeMirror:not(.mono-line){
+  min-height: 320px;
+}
+
 #bang textarea {
     margin-top: 10px;
 }
@@ -29,51 +33,6 @@ body {
     padding: 5px;
     color: white;
     background-color: #A00000;
-}
-
-@keyframes swing
-{
-    15%
-    {
-        -webkit-transform: translateX(5px);
-        transform: translateX(5px);
-    }
-    30%
-    {
-        -webkit-transform: translateX(-5px);
-        transform: translateX(-5px);
-    }
-    50%
-    {
-        -webkit-transform: translateX(3px);
-        transform: translateX(3px);
-    }
-    65%
-    {
-        -webkit-transform: translateX(-3px);
-        transform: translateX(-3px);
-    }
-    80%
-    {
-        -webkit-transform: translateX(2px);
-        transform: translateX(2px);
-    }
-    100%
-    {
-        -webkit-transform: translateX(0);
-        transform: translateX(0);
-    }
-}
-
-.output {
-    transition:all 0.3s ease;
-}
-
-.wobble {
-    -webkit-animation: swing 1s ease;
-    animation: swing 1s ease;
-    -webkit-animation-iteration-count: 1;
-    animation-iteration-count: 1;
 }
 
 canvas {

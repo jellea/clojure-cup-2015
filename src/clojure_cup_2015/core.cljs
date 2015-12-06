@@ -24,10 +24,8 @@
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
   [:div
-   [:div.output [:canvas.right {:id id}]]
-   [:div [cm-editor {:default-value default-code
-                     :id id}
-                    {}]]])
+   [:canvas.right {:id id}]
+   [cm-editor {:default-value default-code :id id} {}]])
 
 (defn monoline-editor
   [id default-code]
@@ -44,7 +42,6 @@
       (into [canvas-editor] (rest c))
       (mapv inject-editors c))
     c))
-
 
 (defn bang-bang []
   [:div
