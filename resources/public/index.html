@@ -41,7 +41,7 @@
 (sketch
   :host "pink-triangles"
   :size [300 300]
-  :draw draw-pink-triangles
+  :draw #'draw-pink-triangles
   :setup #(frame-rate 1))
         </div>
 
@@ -67,7 +67,7 @@ That's already a lovely pattern we got going. Knit it into a turtleneck and aunt
 (sketch
   :host "carrousel"
   :size [300 300]
-  :draw draw-carrousel)
+  :draw #'draw-carrousel)
         </div>
 
       <p>
@@ -118,9 +118,9 @@ That's already a lovely pattern we got going. Knit it into a turtleneck and aunt
 (sketch
   :host "tailspin"
   :size [500 500]
-  :setup setup
-  :update update-state
-  :draw draw-state
+  :setup #'setup
+  :update #'update-state
+  :draw #'draw-state
   :middleware [quil.middleware/fun-mode])
 
     </div>
