@@ -48,14 +48,16 @@
 (defn on-js-reload [])
 
 (defn mirrorize-one! [e]
-  (let [cmtype (d/attr e "data-cmtype")
+  (let [monoline (d/attr e "data-monoline")
         cmid (d/attr e "data-cmid")
         text (->> e .-text clojure.string/trim)
         new (d/create-element :div)]
     (d/remove-class! e "editor") ;; only replace once (d/add-class! editor "cm")
     ;; (d/add-class! new "cm")
     (d/insert-before! new e)
-    (reagent/render-component [canvas-editor cmid text] new)))
+    (if monoline
+      (reagent/render-component [monoline-editor cmid text] new)
+      (reagent/render-component [canvas-editor cmid text] new))))
 
 (defn mirrorize! []
   (doseq [e (sel ".editor")]

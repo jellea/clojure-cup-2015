@@ -118,7 +118,9 @@
         (eval name-space (.getValue editor) on-evaluated)
                                         ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
-          (js/oneLineCM editor))
+          (js/oneLineCM editor)
+          ;;(add-inline {:line 0 :ch 100 :text "test"} editor)
+          )
         (.on editor "change" (debounce #(eval name-space
                                               (.getValue editor)
                                               (fn [e] (find-error e id)))))
