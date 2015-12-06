@@ -6,7 +6,7 @@
             [cljs.tools.reader]))
 
 (defn debounce
-  ([f] (debounce f 1000))
+  ([f] (debounce f 3000))
   ([f timeout]
    (let [id (atom nil)]
      (fn [evt]
