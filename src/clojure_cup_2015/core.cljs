@@ -22,11 +22,19 @@
 (defn q [selector] (.querySelector js/document selector))
 (defn by-id [id] (.getElementById js/document id))
 
+(defn error-display []
+  (let [{:keys [error]} @!state]
+    [:div
+     (when error
+       [:p.error error])]))
+
 (defn canvas-editor
   "Code mirror + a canvas, so quil can render to it"
   [id default-code]
   [:div
-   [:canvas.right {:id id}]
+   [:div.right.holder {:id (str id "_holder")}
+    [:canvas {:id id}]
+    [error-display]]
    [cm-editor {:default-value default-code :id id} {}]])
 
 (defn monoline-editor

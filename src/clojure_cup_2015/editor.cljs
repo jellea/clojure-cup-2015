@@ -14,10 +14,12 @@
 
 (defn move-canvas
   [cm canvas-id]
+  (js/console.log canvas-id)
   (when canvas-id
-    (let [canvas (.getElementById js/document canvas-id)
+    (let [canvas (.getElementById js/document (str canvas-id "_holder"))
           cmheight (.heightAtLine cm (+ (.-line (.getCursor cm)) 1) "local")
-          height (min (max (- cmheight (.-height canvas)) 15))]
+          height (min (max (- cmheight 300) 15))]
+      (js/console.log cmheight height)
       (set! (.. canvas -style -transform) (str "translate(-30px," height "px)")))))
 
 (defn outer-sexp
@@ -46,8 +48,10 @@
     (set! (.-innerHTML dom-node) text)
     (.setBookmark (.-doc editor) #js {:line line :ch ch} #js {:widget dom-node})))
 
-(defn error-hud []
-  (let []))
+(defn error! [error]
+  (swap! !state assoc :error error))
+
+(defn dismiss! [] (error! nil))
 
 (defonce cljs-compiler-state (cljs/empty-state))
 
@@ -56,16 +60,24 @@
    (eval name-space in-str #()))
   ([name-space in-str callback]
    (let [st cljs-compiler-state]
-      (prn name-space)
-      (cljs/eval-str st in-str (symbol name-space)
-        {:eval cljs/js-eval
-          :ns (symbol name-space)
-          ;;:verbose true
+     (prn name-space)
+     (cljs/eval-str st in-str (symbol name-space)
+                    {:eval cljs/js-eval
+                     :ns (symbol name-space)
+                     ;;:verbose true
 
-          ;; don't ask me why this works. It stops Clojurescript from complaining that
-          ;; *load-fn* isn't defined
-          :load (fn [_ cb] (cb {:lang :clj :source ""}))}
-        callback))))
+                     ;; don't ask me why this works. It stops Clojurescript from complaining that
+                     ;; *load-fn* isn't defined
+                     :load (fn [_ cb] (cb {:lang :clj :source ""}))}
+                    (fn [{:keys [error value]}]
+                      (if error
+                        (do
+                          (error! (->> error .-cause .-message))
+                          (swap! !state assoc :result nil))
+                        (do
+                          (dismiss!)
+                          (swap! !state assoc :result (str value)))))))))
+
 
 (defn cm-editor
   "CodeMirror reagent component"
@@ -81,9 +93,9 @@
         (eval name-space (str "(ns " name-space "
                            (:require [quil.core :as q]
                                      [quil.middleware :as m]))"
-                           (quil-symbols/import-symbols-src)))
+                              (quil-symbols/import-symbols-src)))
         (eval name-space (.getValue editor))
-        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
+                                        ; (add-inline {:line 0 :ch 100 :text "hi"} editor)
         (when (:monoline props)
           (js/oneLineCM editor))
         (.on editor "change" #(eval name-space (.getValue editor) js/console.log))
