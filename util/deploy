@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
 lein clean
-lein cljsbuild once min
+lein uberjar
 
 aws s3 --region eu-central-1 sync --delete resources/public/ s3://landofquil.we-do-fp.berlin/
