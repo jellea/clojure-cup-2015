@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+aws s3 --region eu-central-1 sync resources/public/ s3://landofquil.we-do-fp.berlin/
