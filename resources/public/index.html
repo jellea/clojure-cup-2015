@@ -30,7 +30,7 @@
       <div>
         <p><em>
           Good day, traveler. Today you embark upon a journey into Quil. May your
-          sight be keen, for there are sights to behold.
+          vision be keen, for there are sights to behold.
         </em></p>
         <p class="bold blue">
           <a href="introclojure.html">If you're new to the realms of Clojure, click here to start from scratch. &rarr;</a>
@@ -47,10 +47,6 @@
           but it can also be a rich animation or an interactive visualization.
         </p>
         <p>
-          Each sketch is powered by a <em>draw function</em>, which renders
-          shapes and colors on the screen.
-        </p>
-        <p>
           You'll find many sketches in this tutorial. All of them are "live" —
           change the code and you should immediately see the sketch change.
           Hover over a Quil function name to see what it does.
@@ -60,7 +56,9 @@
         <p>
           These first few sketches will give you a taste of things to come. They
           are presented without much explanation. We'll dive into the details
-          later. Play around with them, there's nothing you can break. Should you happen to make a mess, simply hit the red "revert" button, and you'll get the original code back.
+          later. Play around with them, there's nothing you can break. Should
+          you happen to make a mess, simply hit the red "revert" button, and
+          you'll get the original code back.
         </p>
 
         <h3>The Pine Forest</h3>
@@ -322,9 +320,10 @@
         <h2>Animation and State</h2>
 
         <p>
-          Drawing shapes is good, but making them move is better!
+          <blockquote>
+            Don't just draw something, make it move! — Winston Churchill
+          </blockquote>
         </p>
-
 
         <h3>Slider</h3>
 
@@ -339,11 +338,11 @@
 </p>
 
 <p>
-Another approach is the use the current time in miliseconds, this way we have a way to measure passing time independent of the the current frame rate. Quil provides the handy <tt>(milis)</tt> function for that.
+Another approach is the use the current time in milliseconds, this way we have a way to measure passing time independent of the the current frame rate. Quil provides the handy <tt>(millis)</tt> function for that.
 </p>
 
 <p>
-In this next example we use <tt>(milis)</tt> to calculate a horizontal position.
+In this next example we use <tt>(millis)</tt> to calculate a horizontal position.
 With Clojure's <tt>mod</tt> function (modulo, in other words the remainder after
 division), we let the animation wrap around again.
 </p>
