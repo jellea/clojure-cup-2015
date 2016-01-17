@@ -32,12 +32,12 @@ p {
 }
 
 pre {
-  font-family: "Input Mono Comp";
+  font-family: "Cousine", "Menlo", monospace;
   margin-bottom: 0em;
 }
 
 .CodeMirror {
-  font-family: "Input Mono Comp";
+  font-family: "Cousine", "Menlo", monospace;
   font-style: normal;
   font-weight: normal;
   padding: 15px;
@@ -78,7 +78,7 @@ canvas {
 }
 
 .error {
-    font-family: "Input Mono Comp";
+    font-family: "Cousine", "Menlo", monospace;
     font-style: normal;
     font-weight: normal;
     font-size: 14px;
